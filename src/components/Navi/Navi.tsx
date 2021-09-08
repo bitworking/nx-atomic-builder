@@ -29,6 +29,16 @@ export const Navi = () => {
           </li>
         ))}
       </ul>
+      <h4>Components</h4>
+      <ul>
+        {state.components.map((component) => (
+          <li key={component.id}>
+            <Link href={`/component-edit/${component.id}`}>
+              <a>{component.name}</a>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </>
   );
 };

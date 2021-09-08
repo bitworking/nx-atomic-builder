@@ -32,15 +32,14 @@ export const FormComponent = ({ imageRef: imageRefDefault, onData }: FormCompone
       </div>
       <div>
         <label>
-          <span>componentId: </span>
+          <span>Name: </span>
           <input
             type="text"
-            value={imageRef.componentId ?? ''}
+            value={imageRef.componentName ?? ''}
             onChange={(event) =>
               setImageRef({
                 ...imageRef,
-                componentId:
-                  event.currentTarget.value !== '' ? parseInt(event.currentTarget.value, 10) : null,
+                componentName: event.currentTarget.value !== '' ? event.currentTarget.value : null,
               })
             }
           />

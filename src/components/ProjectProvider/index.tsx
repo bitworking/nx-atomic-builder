@@ -36,6 +36,7 @@ export type ImageRef = {
   id: number;
   imageId: number;
   componentId: number | null;
+  componentName: string | null;
   parentComponentId: number | null;
   x: number;
   y: number;
@@ -102,16 +103,22 @@ export type ActionUpdateImageRef = {
   imageRef: ImageRef;
 };
 
+export type ActionBuildComponents = {
+  type: 'buildComponents';
+};
+
 export type Action =
   | ActionAddImage
   | ActionAddComponent
   | ActionCreateComponent
   | ActionCreateImageRef
-  | ActionUpdateImageRef;
+  | ActionUpdateImageRef
+  | ActionBuildComponents;
 
 const reducer = (state: ProjectData, action: Action): ProjectData => {
   if (action.type === 'addImage') {
     // remove if already in array
+    // TODO: use map instead for updating?
     const images = state.images.filter((image) => image.id !== action.data.id);
     return { ...state, images: [...images, action.data] };
   }
@@ -140,6 +147,7 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
           id: state.imageRefs.length,
           imageId: action.imageData.id,
           componentId: action.componentId,
+          componentName: null,
           parentComponentId: action.parentComponentId,
           x: 0.1,
           y: 0.1,
@@ -150,18 +158,46 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
     };
   }
   if (action.type === 'updateImageRef') {
-    // const filtered = state.imageRefs.filter((imageRef) => imageRef.id !== action.imageRef.id);
     const mapped = state.imageRefs.map((imageRef) => {
       if (imageRef.id === action.imageRef.id) {
         return action.imageRef;
       }
       return imageRef;
     });
-
-    // console.log('updateImageRef', { ...state, imageRefs: [...filtered, { ...action.imageRef }] });
-
-    // return state;
     return { ...state, imageRefs: mapped };
+  }
+  if (action.type === 'buildComponents') {
+    const components = state.imageRefs.reduce<{
+      components: ComponentData[];
+      imageRefs: ImageRef[];
+    }>(
+      (acc, imageRef) => {
+        let components: ComponentData[] = acc.components;
+        let component: ComponentData | null = null;
+        let imageRefs: ImageRef[] = acc.imageRefs;
+        if (imageRef.componentName) {
+          // component exists?
+          component =
+            acc.components.find((component) => component.name === imageRef.componentName) ?? null;
+
+          if (!component) {
+            (component = {
+              id: components.length,
+              name: imageRef.componentName,
+              props: {},
+            }),
+              (components = [...components, component]);
+          }
+        }
+
+        imageRef.componentId = component?.id ?? null;
+
+        return { components, imageRefs };
+      },
+      { components: [], imageRefs: [] }
+    );
+
+    return { ...state, components: components.components };
   }
   return state;
 };

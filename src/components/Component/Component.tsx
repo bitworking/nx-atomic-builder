@@ -6,6 +6,7 @@ import { FormComponent } from '../FormComponent';
 type ComponentContainerProps = {
   imageData: ImageData;
   parentComponentData?: ComponentData;
+  parentImageRef: ImageRef | null;
 };
 
 type ComponentProps = {
@@ -13,10 +14,15 @@ type ComponentProps = {
   imageData: ImageData;
   selectedId: number;
   setSelectedId: (id: number) => void;
-  updateImageRef: (imageRef: ImageRef) => void;
+  updateImageRef: (imageRef: ImageRef, buildComponents?: boolean) => void;
+  parentScale: { x: number; y: number; width: number; height: number };
 };
 
-export const ComponentContainer = ({ imageData, parentComponentData }: ComponentContainerProps) => {
+export const ComponentContainer = ({
+  imageData,
+  parentComponentData,
+  parentImageRef,
+}: ComponentContainerProps) => {
   const [imageRefs, setImageRefs] = useState<ImageRef[]>([]);
   const [selectedId, setSelectedId] = useState(-1);
   const { dispatch, state, uid } = useProjectContext();
@@ -27,13 +33,14 @@ export const ComponentContainer = ({ imageData, parentComponentData }: Component
         ? image.imageId === imageData.id && image.parentComponentId === null
         : image.imageId === imageData.id && image.parentComponentId === parentComponentData.id
     );
-
     setImageRefs(imageRefs);
-  }, [state, imageData]);
+  }, [state, imageData, parentComponentData]);
 
-  const updateImageRef = (imageRef: ImageRef) => {
-    console.log('updateImageRef component', imageRef);
+  const updateImageRef = (imageRef: ImageRef, buildComponents: boolean = false) => {
     dispatch({ type: 'updateImageRef', imageRef });
+    if (buildComponents) {
+      dispatch({ type: 'buildComponents' });
+    }
   };
 
   const addImageRef = () => {
@@ -49,9 +56,16 @@ export const ComponentContainer = ({ imageData, parentComponentData }: Component
   //   console.log(imageRefs);
   // }, [imageRefs]);
 
+  const parentScale = {
+    x: parentImageRef?.x ?? 0,
+    y: parentImageRef?.y ?? 0,
+    width: parentImageRef?.width ?? 1,
+    height: parentImageRef?.height ?? 1,
+  };
+
   return (
     <>
-      <div style={{ position: 'absolute', top: -30, left: 0 }}>
+      <div style={{ position: 'fixed', top: 30, right: 30 }}>
         <button onClick={() => addImageRef()}>Add component</button>
       </div>
       {imageRefs.map((imageRef) => (
@@ -62,6 +76,7 @@ export const ComponentContainer = ({ imageData, parentComponentData }: Component
           selectedId={selectedId}
           setSelectedId={setSelectedId}
           updateImageRef={updateImageRef}
+          parentScale={parentScale}
         />
       ))}
     </>
@@ -74,26 +89,51 @@ export const Component = ({
   selectedId,
   setSelectedId,
   updateImageRef,
+  parentScale,
 }: ComponentProps) => {
   const ref = useRef<Rnd | null>(null);
   const isSelected = imageRef.id === selectedId;
 
   // set initial position/size
   useEffect(() => {
-    const width = ref.current?.resizableElement.current?.parentElement?.offsetWidth ?? 800;
-    const height = ref.current?.resizableElement.current?.parentElement?.offsetHeight ?? 600;
+    if (ref) {
+      window.setTimeout(() => {
+        const width = ref.current?.resizableElement.current?.parentElement?.offsetWidth ?? 800;
+        const height = ref.current?.resizableElement.current?.parentElement?.offsetHeight ?? 600;
 
-    // const scaling = width / imageData.width;
+        const scalingX = width / (imageData.width * parentScale.width);
+        const scalingY = height / (imageData.height * parentScale.height);
 
-    ref.current?.updatePosition({ x: imageRef.x * width, y: imageRef.y * height });
-    ref.current?.updateSize({ width: imageRef.width * width, height: imageRef.height * height });
-  }, [imageRef]);
+        // console.log('update', {
+        //   x: (imageRef.x + parentScale.x) * imageData.width * scalingX,
+        //   y: (imageRef.y + parentScale.y) * imageData.height * scalingY,
+        //   width: imageRef.width * imageData.width * scalingX,
+        //   height: imageRef.height * imageData.height * scalingY,
+        // });
+
+        ref.current?.updatePosition({
+          // x: (imageRef.x * width) / parentScale.width + width * parentScale.x,
+          // y: (imageRef.y * height) / parentScale.height + height * parentScale.y,
+          // x: (imageRef.x - parentScale.x) * imageData.width * scalingX,
+          // y: (imageRef.y - parentScale.y) * imageData.height * scalingY,
+          x: ((imageRef.x - parentScale.x) / parentScale.width) * width * scalingX,
+          y: ((imageRef.y - parentScale.y) / parentScale.height) * height * scalingY,
+        });
+        ref.current?.updateSize({
+          // width: imageRef.width * width * parentScale.width,
+          // height: imageRef.height * height * parentScale.height,
+          width: imageRef.width * imageData.width * scalingX,
+          height: imageRef.height * imageData.height * scalingY,
+        });
+      }, 10);
+    }
+  }, [imageRef, ref, parentScale]);
 
   return (
     <>
       {isSelected && (
-        <div style={{ position: 'absolute', right: 0, top: -150 }}>
-          <FormComponent imageRef={imageRef} onData={updateImageRef} />
+        <div style={{ position: 'fixed', top: 60, right: 30, background: '#f0f0f0', padding: 30 }}>
+          <FormComponent imageRef={imageRef} onData={(data) => updateImageRef(data, true)} />
         </div>
       )}
       <Rnd
@@ -108,22 +148,31 @@ export const Component = ({
         bounds="parent"
         onDragStart={() => setSelectedId(imageRef.id)}
         onResizeStart={() => setSelectedId(imageRef.id)}
-        onResizeStop={(event, dir, ref, delta, position) =>
+        onResizeStop={(event, dir, ref, delta, position) => {
           updateImageRef({
             ...imageRef,
-            x: position.x / (ref.parentElement?.offsetWidth ?? 1),
-            y: position.y / (ref.parentElement?.offsetHeight ?? 1),
-            width: ref.offsetWidth / (ref.parentElement?.offsetWidth ?? 1),
-            height: ref.offsetHeight / (ref.parentElement?.offsetHeight ?? 1),
-          })
-        }
-        onDragStop={(event, position) =>
+            x:
+              (position.x / (ref.parentElement?.offsetWidth ?? 1)) * parentScale.width +
+              parentScale.x,
+            y:
+              (position.y / (ref.parentElement?.offsetHeight ?? 1)) * parentScale.height +
+              parentScale.y,
+            width: (ref.offsetWidth / (ref.parentElement?.offsetWidth ?? 1)) * parentScale.width,
+            height:
+              (ref.offsetHeight / (ref.parentElement?.offsetHeight ?? 1)) * parentScale.height,
+          });
+        }}
+        onDragStop={(event, position) => {
           updateImageRef({
             ...imageRef,
-            x: position.x / (position.node.parentElement?.offsetWidth ?? 1),
-            y: position.y / (position.node.parentElement?.offsetHeight ?? 1),
-          })
-        }
+            x:
+              (position.x / (position.node.parentElement?.offsetWidth ?? 1)) * parentScale.width +
+              parentScale.x,
+            y:
+              (position.y / (position.node.parentElement?.offsetHeight ?? 1)) * parentScale.height +
+              parentScale.y,
+          });
+        }}
       ></Rnd>
     </>
   );
