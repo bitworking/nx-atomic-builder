@@ -65,7 +65,7 @@ export const ComponentContainer = ({
 
   return (
     <>
-      <div style={{ position: 'fixed', top: 30, right: 30 }}>
+      <div style={{ position: 'fixed', top: 30, right: 30, zIndex: 100 }}>
         <button onClick={() => addImageRef()}>Add component</button>
       </div>
       {imageRefs.map((imageRef) => (
@@ -101,29 +101,18 @@ export const Component = ({
         const width = ref.current?.resizableElement.current?.parentElement?.offsetWidth ?? 800;
         const height = ref.current?.resizableElement.current?.parentElement?.offsetHeight ?? 600;
 
-        const scalingX = width / (imageData.width * parentScale.width);
-        const scalingY = height / (imageData.height * parentScale.height);
-
-        // console.log('update', {
-        //   x: (imageRef.x + parentScale.x) * imageData.width * scalingX,
-        //   y: (imageRef.y + parentScale.y) * imageData.height * scalingY,
-        //   width: imageRef.width * imageData.width * scalingX,
-        //   height: imageRef.height * imageData.height * scalingY,
-        // });
+        // const scalingX = width / (imageData.width * parentScale.width);
+        // const scalingY = height / (imageData.height * parentScale.height);
 
         ref.current?.updatePosition({
-          // x: (imageRef.x * width) / parentScale.width + width * parentScale.x,
-          // y: (imageRef.y * height) / parentScale.height + height * parentScale.y,
-          // x: (imageRef.x - parentScale.x) * imageData.width * scalingX,
-          // y: (imageRef.y - parentScale.y) * imageData.height * scalingY,
-          x: ((imageRef.x - parentScale.x) / parentScale.width) * width * scalingX,
-          y: ((imageRef.y - parentScale.y) / parentScale.height) * height * scalingY,
+          // x: ((imageRef.x - parentScale.x) / parentScale.width) * width * scalingX,
+          // y: ((imageRef.y - parentScale.y) / parentScale.height) * height * scalingY,
+          x: ((imageRef.x - parentScale.x) / parentScale.width) * width,
+          y: ((imageRef.y - parentScale.y) / parentScale.height) * height,
         });
         ref.current?.updateSize({
-          // width: imageRef.width * width * parentScale.width,
-          // height: imageRef.height * height * parentScale.height,
-          width: imageRef.width * imageData.width * scalingX,
-          height: imageRef.height * imageData.height * scalingY,
+          width: (imageRef.width * width) / parentScale.width,
+          height: (imageRef.height * height) / parentScale.height,
         });
       }, 10);
     }
@@ -132,7 +121,16 @@ export const Component = ({
   return (
     <>
       {isSelected && (
-        <div style={{ position: 'fixed', top: 60, right: 30, background: '#f0f0f0', padding: 30 }}>
+        <div
+          style={{
+            position: 'fixed',
+            top: 60,
+            right: 30,
+            background: '#f0f0f0',
+            padding: 30,
+            zIndex: 100,
+          }}
+        >
           <FormComponent imageRef={imageRef} onData={(data) => updateImageRef(data, true)} />
         </div>
       )}

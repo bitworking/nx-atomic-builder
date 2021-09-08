@@ -73,10 +73,14 @@ const Page: NextPage = () => {
         const scaleHeight = state.images[data.imageId].height;
 
         const cropped = await cropDataUrl(imageData.data, {
-          x: data.x * scaleWidth,
-          y: data.y * scaleHeight,
-          width: data.width * scaleWidth,
-          height: data.height * scaleHeight,
+          // x: data.x * scaleWidth,
+          // y: data.y * scaleHeight,
+          // width: data.width * scaleWidth,
+          // height: data.height * scaleHeight,
+          x: data.x * imageData.width,
+          y: data.y * imageData.height,
+          width: data.width * imageData.width,
+          height: data.height * imageData.height,
         });
 
         setDataUrl(cropped);

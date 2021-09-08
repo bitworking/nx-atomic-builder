@@ -33,7 +33,7 @@ const Page: NextPage = () => {
     <ImageLoader
       onData={(data) => dispatch({ type: 'addImage', data })}
       initialData={imgData ?? undefined}
-      components={<ComponentContainer imageData={imgData} />}
+      components={<ComponentContainer imageData={imgData} parentImageRef={null} />}
     >
       <h3>Edit image</h3>
     </ImageLoader>
