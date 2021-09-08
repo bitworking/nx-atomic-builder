@@ -1,0 +1,15 @@
+.projectLoader {
+
+}
+
+.projectLoader__dropzone {
+  border: 1px solid lightgray;
+  min-width: 300px;
+  min-height: 300px;
+  background: #f0f0f0;
+  margin-top: 50px;
+}
+
+.projectLoader__dropzone__active {
+  opacity: 0.5;
+}

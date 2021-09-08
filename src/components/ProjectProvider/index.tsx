@@ -107,13 +107,19 @@ export type ActionBuildComponents = {
   type: 'buildComponents';
 };
 
+export type ActionImportProject = {
+  type: 'importProject';
+  data: ProjectData;
+};
+
 export type Action =
   | ActionAddImage
   | ActionAddComponent
   | ActionCreateComponent
   | ActionCreateImageRef
   | ActionUpdateImageRef
-  | ActionBuildComponents;
+  | ActionBuildComponents
+  | ActionImportProject;
 
 const reducer = (state: ProjectData, action: Action): ProjectData => {
   if (action.type === 'addImage') {
@@ -198,6 +204,9 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
     );
 
     return { ...state, components: components.components };
+  }
+  if (action.type === 'importProject') {
+    return { ...action.data };
   }
   return state;
 };
