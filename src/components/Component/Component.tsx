@@ -6,7 +6,7 @@ import { FormComponent } from '../FormComponent';
 type ComponentContainerProps = {
   imageData: ImageData;
   parentComponentData?: ComponentData;
-  parentImageRef: ImageRef | null;
+  parentImageRef?: ImageRef | null;
 };
 
 type ComponentProps = {
@@ -30,11 +30,11 @@ export const ComponentContainer = ({
   useEffect(() => {
     const imageRefs = state.imageRefs.filter((image) =>
       !parentComponentData
-        ? image.imageId === imageData.id && image.parentComponentId === null
-        : image.imageId === imageData.id && image.parentComponentId === parentComponentData.id
+        ? image.imageId === imageData.id && image.parentImageRefId === null
+        : image.imageId === imageData.id && image.parentImageRefId === parentImageRef?.id
     );
     setImageRefs(imageRefs);
-  }, [state, imageData, parentComponentData]);
+  }, [state, imageData, parentComponentData, parentImageRef]);
 
   const updateImageRef = (imageRef: ImageRef, buildComponents: boolean = false) => {
     dispatch({ type: 'updateImageRef', imageRef });
@@ -49,6 +49,7 @@ export const ComponentContainer = ({
       imageData,
       componentId: null,
       parentComponentId: parentComponentData?.id ?? null,
+      parentImageRefId: parentImageRef?.id ?? null,
     });
   };
 
@@ -105,10 +106,8 @@ export const Component = ({
         // const scalingY = height / (imageData.height * parentScale.height);
 
         ref.current?.updatePosition({
-          // x: ((imageRef.x - parentScale.x) / parentScale.width) * width * scalingX,
-          // y: ((imageRef.y - parentScale.y) / parentScale.height) * height * scalingY,
-          x: ((imageRef.x - parentScale.x) / parentScale.width) * width,
-          y: ((imageRef.y - parentScale.y) / parentScale.height) * height,
+          x: Math.max(0, ((imageRef.x - parentScale.x) / parentScale.width) * width),
+          y: Math.max(0, ((imageRef.y - parentScale.y) / parentScale.height) * height),
         });
         ref.current?.updateSize({
           width: (imageRef.width * width) / parentScale.width,

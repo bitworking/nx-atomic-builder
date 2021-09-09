@@ -30,6 +30,7 @@ export const ProjectLoader = () => {
       },
       false
     );
+
     window.addEventListener(
       'drop',
       function (e) {

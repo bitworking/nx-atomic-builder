@@ -8,7 +8,7 @@ body {
 
 a {
   color: inherit;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 * {
@@ -18,3 +18,27 @@ a {
 .active {
   background: #89dc18;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 30px;
+}
+
+h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.panel {
+  margin-bottom: 30px;
+}
+
+.back-link {
+  margin-bottom: 30px;
+}
+
+.link-list {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+

@@ -33,9 +33,20 @@ export const Navi = () => {
       <ul>
         {state.components.map((component) => (
           <li key={component.id}>
-            <Link href={`/component-edit/${component.id}`}>
+            <Link href={`/component/${component.id}`}>
               <a>{component.name}</a>
             </Link>
+            <ul>
+              {state.imageRefs.map((imageRef) =>
+                imageRef.componentId === component.id ? (
+                  <li>
+                    <Link href={`/component-edit/${imageRef.id}`}>
+                      <a>{imageRef.variant ?? imageRef.id}</a>
+                    </Link>
+                  </li>
+                ) : null
+              )}
+            </ul>
           </li>
         ))}
       </ul>

@@ -38,6 +38,7 @@ export type ImageRef = {
   componentId: number | null;
   componentName: string | null;
   parentComponentId: number | null;
+  parentImageRefId: number | null;
   x: number;
   y: number;
   width: number;
@@ -96,6 +97,7 @@ export type ActionCreateImageRef = {
   imageData: ImageData;
   componentId: number | null;
   parentComponentId: number | null;
+  parentImageRefId: number | null;
 };
 
 export type ActionUpdateImageRef = {
@@ -155,10 +157,11 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
           componentId: action.componentId,
           componentName: null,
           parentComponentId: action.parentComponentId,
-          x: 0.1,
-          y: 0.1,
-          width: 0.3,
-          height: 0.1,
+          parentImageRefId: action.parentImageRefId,
+          x: action.parentImageRefId ? state.imageRefs[action.parentImageRefId].x + 0.1 : 0.1,
+          y: action.parentImageRefId ? state.imageRefs[action.parentImageRefId].y + 0.1 : 0.1,
+          width: 0.2,
+          height: 0.2,
         },
       ],
     };

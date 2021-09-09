@@ -1,4 +1,5 @@
 import { SyntheticEvent, useEffect, useState } from 'react';
+import Link from 'next/link';
 import { ComponentData, ImageData, ImageRef } from 'components/ProjectProvider';
 
 type FormComponentProps = {
@@ -45,6 +46,24 @@ export const FormComponent = ({ imageRef: imageRefDefault, onData }: FormCompone
           />
         </label>
       </div>
+      <div>
+        <label>
+          <span>Variant: </span>
+          <input
+            type="text"
+            value={imageRef.variant ?? ''}
+            onChange={(event) =>
+              setImageRef({
+                ...imageRef,
+                variant: event.currentTarget.value !== '' ? event.currentTarget.value : undefined,
+              })
+            }
+          />
+        </label>
+      </div>
+      <Link href={`/component-edit/${imageRef.id}`}>
+        <a>Edit</a>
+      </Link>
       {/*<div>{<button type="submit">Save</button>}</div>*/}
     </form>
   );
