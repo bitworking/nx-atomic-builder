@@ -50,28 +50,42 @@ const Page: NextPage = () => {
   }
 
   return (
-    <>
-      <div className="back-link">
-        {imageRef && (
-          <Link href={`/component/${imageRef.componentId}`}>
-            <a>Back</a>
-          </Link>
-        )}
-      </div>
-      <h3>
-        {component.name} ({imageRef?.variant ?? imageRef?.id})
-      </h3>
-      <div style={{ position: 'relative' }}>
-        <Image imageRef={imageRef} />
-        {imageData && (
-          <ComponentContainer
-            imageData={imageData}
-            parentComponentData={component}
-            parentImageRef={imageRef}
-          />
-        )}
-      </div>
-    </>
+    <ComponentContainer
+      imageData={imageData}
+      parentComponentData={component ?? undefined}
+      parentImageRef={imageRef}
+    >
+      {({ addButton, components, form }) => (
+        <>
+          <div className="back-link">
+            {imageRef && (
+              <Link href={`/component/${imageRef.componentId}`}>
+                <a>Go to component</a>
+              </Link>
+            )}
+          </div>
+          <div className="header__container">
+            <div className="header__col">
+              <div>
+                <h2>
+                  {component?.name} : {imageRef?.variant ?? `variant ${imageRef?.id}`}
+                </h2>
+              </div>
+            </div>
+            <div className="header__col">
+              <div>{form}</div>
+            </div>
+          </div>
+          {addButton}
+          <div>
+            <div className="image-container">
+              <Image imageRef={imageRef} />
+              {components}
+            </div>
+          </div>
+        </>
+      )}
+    </ComponentContainer>
   );
 };
 

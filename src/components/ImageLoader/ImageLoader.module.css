@@ -1,13 +1,9 @@
-.imageLoader {
-
-}
-
 .imageLoader__dropzone {
   border: 1px solid lightgray;
   min-width: 300px;
   min-height: 300px;
   background: #f0f0f0;
-  margin-top: 50px;
+  display: inline-block;
 }
 
 .imageLoader__dropzone__active {
@@ -15,7 +11,7 @@
 }
 
 .imageLoader__imgContainer {
-  position: relative;
+
 }
 
 .imageLoader__imgContainer__img {

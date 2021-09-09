@@ -41,7 +41,7 @@ export const Navi = () => {
                 imageRef.componentId === component.id ? (
                   <li>
                     <Link href={`/component-edit/${imageRef.id}`}>
-                      <a>{imageRef.variant ?? imageRef.id}</a>
+                      <a>{imageRef.variant ?? `variant ${imageRef.id}`}</a>
                     </Link>
                   </li>
                 ) : null

@@ -11,6 +11,10 @@ a {
   text-decoration: underline;
 }
 
+a:hover {
+  color: #757575;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -19,7 +23,7 @@ a {
   background: #89dc18;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, p {
   margin-top: 0;
   margin-bottom: 30px;
 }
@@ -41,4 +45,35 @@ h4, h5, h6 {
   margin-right: 10px;
   margin-bottom: 10px;
 }
+
+button {
+  margin-bottom: 15px;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.header__container {
+  display: flex;
+  background-color: #f0f0f0;
+  padding: 30px;
+  margin-bottom: 30px;
+  min-height: 200px;
+}
+
+.header__col > div {
+  margin-right: 50px;
+}
+
+.form__row {
+  margin-bottom: 10px;
+}
+
+.form__row span {
+  min-width: 80px;
+  display: inline-block;
+}
+
 

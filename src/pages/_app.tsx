@@ -15,11 +15,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.container}>
-        <header className={styles.header}>
+        <div className={styles.navi}>
           <nav>
             <Navi />
           </nav>
-        </header>
+        </div>
         <main className={styles.content}>
           <Component {...pageProps} />
         </main>

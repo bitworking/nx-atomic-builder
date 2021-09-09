@@ -95,28 +95,34 @@ const Page: NextPage = () => {
 
   return (
     <>
-      <h2>{component.name}</h2>
+      <div className="header__container">
+        <div className="header__col">
+          <div>
+            <h2>{component.name}</h2>
 
-      <div className="panel">
-        <h4>Parents:</h4>
-        {components.parents?.map((component) => (
-          <Link key={component.id} href={`/component/${component.id}`}>
-            <a className="link-list">
-              <span>{component.name}</span>
-            </a>
-          </Link>
-        )) ?? <span>Not used by any component</span>}
-      </div>
+            <div className="panel">
+              <h4>Parents:</h4>
+              {components.parents?.map((component) => (
+                <Link key={component.id} href={`/component/${component.id}`}>
+                  <a className="link-list">
+                    <span>{component.name}</span>
+                  </a>
+                </Link>
+              )) ?? <span>Not used by any component</span>}
+            </div>
 
-      <div className="panel">
-        <h4>Children:</h4>
-        {components.children?.map((component) => (
-          <Link key={component.id} href={`/component/${component.id}`}>
-            <a className="link-list">
-              <span>{component.name}</span>
-            </a>
-          </Link>
-        )) ?? <span>Not using any component</span>}
+            <div className="panel">
+              <h4>Children:</h4>
+              {components.children?.map((component) => (
+                <Link key={component.id} href={`/component/${component.id}`}>
+                  <a className="link-list">
+                    <span>{component.name}</span>
+                  </a>
+                </Link>
+              )) ?? <span>Not using any component</span>}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div>

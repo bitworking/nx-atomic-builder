@@ -1,19 +1,24 @@
-import { SyntheticEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, ReactNode } from 'react';
 import { Rnd } from 'react-rnd';
 import { ComponentData, ImageData, ImageRef, useProjectContext } from 'components/ProjectProvider';
-import { FormComponent } from '../FormComponent';
+import { FormComponent } from 'components/FormComponent';
 
 type ComponentContainerProps = {
-  imageData: ImageData;
+  imageData: ImageData | null;
   parentComponentData?: ComponentData;
   parentImageRef?: ImageRef | null;
+  children: (components: {
+    addButton: ReactNode;
+    components: ReactNode;
+    form: ReactNode;
+  }) => JSX.Element;
 };
 
 type ComponentProps = {
   imageRef: ImageRef;
   imageData: ImageData;
-  selectedId: number;
-  setSelectedId: (id: number) => void;
+  selectedImageRef: ImageRef | null;
+  setSelectedImageRef: (imageRef: ImageRef | null) => void;
   updateImageRef: (imageRef: ImageRef, buildComponents?: boolean) => void;
   parentScale: { x: number; y: number; width: number; height: number };
 };
@@ -22,12 +27,16 @@ export const ComponentContainer = ({
   imageData,
   parentComponentData,
   parentImageRef,
+  children,
 }: ComponentContainerProps) => {
   const [imageRefs, setImageRefs] = useState<ImageRef[]>([]);
-  const [selectedId, setSelectedId] = useState(-1);
+  const [selectedImageRef, setSelectedImageRef] = useState<ImageRef | null>(null);
   const { dispatch, state, uid } = useProjectContext();
 
   useEffect(() => {
+    if (!imageData) {
+      return;
+    }
     const imageRefs = state.imageRefs.filter((image) =>
       !parentComponentData
         ? image.imageId === imageData.id && image.parentImageRefId === null
@@ -35,6 +44,10 @@ export const ComponentContainer = ({
     );
     setImageRefs(imageRefs);
   }, [state, imageData, parentComponentData, parentImageRef]);
+
+  if (!imageData) {
+    return null;
+  }
 
   const updateImageRef = (imageRef: ImageRef, buildComponents: boolean = false) => {
     dispatch({ type: 'updateImageRef', imageRef });
@@ -53,10 +66,6 @@ export const ComponentContainer = ({
     });
   };
 
-  // useEffect(() => {
-  //   console.log(imageRefs);
-  // }, [imageRefs]);
-
   const parentScale = {
     x: parentImageRef?.x ?? 0,
     y: parentImageRef?.y ?? 0,
@@ -64,36 +73,45 @@ export const ComponentContainer = ({
     height: parentImageRef?.height ?? 1,
   };
 
-  return (
+  const addButton = <button onClick={() => addImageRef()}>Add component</button>;
+
+  const components = (
     <>
-      <div style={{ position: 'fixed', top: 30, right: 30, zIndex: 100 }}>
-        <button onClick={() => addImageRef()}>Add component</button>
-      </div>
       {imageRefs.map((imageRef) => (
         <Component
           key={imageRef.id}
           imageRef={imageRef}
           imageData={imageData}
-          selectedId={selectedId}
-          setSelectedId={setSelectedId}
+          selectedImageRef={selectedImageRef}
+          setSelectedImageRef={setSelectedImageRef}
           updateImageRef={updateImageRef}
           parentScale={parentScale}
         />
       ))}
     </>
   );
+
+  const form = (
+    <>
+      {selectedImageRef && (
+        <FormComponent imageRef={selectedImageRef} onData={(data) => updateImageRef(data, true)} />
+      )}
+    </>
+  );
+
+  return children({ addButton, components, form });
 };
 
 export const Component = ({
   imageRef,
   imageData,
-  selectedId,
-  setSelectedId,
+  selectedImageRef,
+  setSelectedImageRef,
   updateImageRef,
   parentScale,
 }: ComponentProps) => {
   const ref = useRef<Rnd | null>(null);
-  const isSelected = imageRef.id === selectedId;
+  const isSelected = imageRef.id === selectedImageRef?.id;
 
   // set initial position/size
   useEffect(() => {
@@ -119,20 +137,6 @@ export const Component = ({
 
   return (
     <>
-      {isSelected && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 60,
-            right: 30,
-            background: '#f0f0f0',
-            padding: 30,
-            zIndex: 100,
-          }}
-        >
-          <FormComponent imageRef={imageRef} onData={(data) => updateImageRef(data, true)} />
-        </div>
-      )}
       <Rnd
         ref={ref}
         style={{
@@ -143,8 +147,8 @@ export const Component = ({
         minWidth={20}
         minHeight={20}
         bounds="parent"
-        onDragStart={() => setSelectedId(imageRef.id)}
-        onResizeStart={() => setSelectedId(imageRef.id)}
+        onDragStart={() => setSelectedImageRef(imageRef)}
+        onResizeStart={() => setSelectedImageRef(imageRef)}
         onResizeStop={(event, dir, ref, delta, position) => {
           updateImageRef({
             ...imageRef,

@@ -6,5 +6,7 @@ export type ImageLoaderProps = {
   onData: (data: ImageData) => void;
   reset?: any;
   children?: React.ReactNode;
+  addButton?: React.ReactNode;
   components?: React.ReactNode;
+  form?: React.ReactNode;
 };

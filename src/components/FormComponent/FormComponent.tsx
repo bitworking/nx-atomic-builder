@@ -26,12 +26,12 @@ export const FormComponent = ({ imageRef: imageRefDefault, onData }: FormCompone
 
   return (
     <form onSubmit={onSubmit}>
-      <div>
+      <div className="form__row">
         <label>
           <span>Id: {imageRef.id}</span>
         </label>
       </div>
-      <div>
+      <div className="form__row">
         <label>
           <span>Name: </span>
           <input
@@ -46,7 +46,7 @@ export const FormComponent = ({ imageRef: imageRefDefault, onData }: FormCompone
           />
         </label>
       </div>
-      <div>
+      <div className="form__row">
         <label>
           <span>Variant: </span>
           <input
@@ -61,9 +61,13 @@ export const FormComponent = ({ imageRef: imageRefDefault, onData }: FormCompone
           />
         </label>
       </div>
-      <Link href={`/component-edit/${imageRef.id}`}>
-        <a>Edit</a>
-      </Link>
+      <div className="form__row">
+        {imageRef.componentName && (
+          <Link href={`/component-edit/${imageRef.id}`}>
+            <a>Edit</a>
+          </Link>
+        )}
+      </div>
       {/*<div>{<button type="submit">Save</button>}</div>*/}
     </form>
   );

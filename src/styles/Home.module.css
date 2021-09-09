@@ -5,7 +5,7 @@
   align-items: stretch;
 }
 
-.header {
+.navi {
   padding: 32px;
   background-color: #f0f0f0;
   min-width: 300px;
@@ -13,6 +13,7 @@
 
 .content {
   padding: 30px;
+  flex: 1;
 }
 
 .footer {

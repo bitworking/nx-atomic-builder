@@ -9,7 +9,9 @@ export const ImageLoader = ({
   onData,
   reset,
   children,
+  addButton,
   components,
+  form,
 }: ImageLoaderProps) => {
   const img = useRef<HTMLImageElement | null>(null);
   const dropzone = useRef<HTMLDivElement | null>(null);
@@ -118,25 +120,36 @@ export const ImageLoader = ({
   }, []);
 
   return (
-    <div className={styles.imageLoader}>
-      <>
-        {children}
-        {imgData && (
-          <p>
-            width: {imgData?.width}px, height: {imgData?.height}px
-          </p>
-        )}
-        {imgData && (
-          <FormImageData
-            imgData={imgData}
-            setImgData={setImgData}
-            onData={(data) => sendData(imgData)}
-          />
-        )}
-        <p>&nbsp;</p>
+    <>
+      {children}
+      <div className="header__container">
+        <div className="header__col">
+          <div>
+            {imgData && (
+              <p>
+                {imgData?.width}x{imgData?.height} pixels
+              </p>
+            )}
+            {imgData && (
+              <FormImageData
+                imgData={imgData}
+                setImgData={setImgData}
+                onData={(data) => sendData(imgData)}
+              />
+            )}
+          </div>
+        </div>
+        <div className="header__col">
+          <div>{form}</div>
+        </div>
+      </div>
 
-        <>
-          <h4>Drop image file here or paste image from clipboard</h4>
+      <>
+        <h4>Drop image file here or paste image from clipboard</h4>
+
+        {addButton}
+
+        <div>
           <div
             ref={dropzone}
             className={`${styles.imageLoader__dropzone} ${
@@ -144,19 +157,21 @@ export const ImageLoader = ({
             }`}
           >
             {data && (
-              <div className={styles.imageLoader__imgContainer}>
-                <img
-                  ref={img}
-                  className={styles.imageLoader__imgContainer__img}
-                  src={data as string}
-                  onLoad={onLoad}
-                />
-                {components}
-              </div>
+              <>
+                <div className={`${styles.imageLoader__imgContainer} image-container`}>
+                  <img
+                    ref={img}
+                    className={styles.imageLoader__imgContainer__img}
+                    src={data as string}
+                    onLoad={onLoad}
+                  />
+                  {components}
+                </div>
+              </>
             )}
           </div>
-        </>
+        </div>
       </>
-    </div>
+    </>
   );
 };

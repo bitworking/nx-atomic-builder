@@ -30,13 +30,19 @@ const Page: NextPage = () => {
   }
 
   return (
-    <ImageLoader
-      onData={(data) => dispatch({ type: 'addImage', data })}
-      initialData={imgData ?? undefined}
-      components={<ComponentContainer imageData={imgData} parentImageRef={null} />}
-    >
-      <h3>Edit image</h3>
-    </ImageLoader>
+    <ComponentContainer imageData={imgData} parentImageRef={null}>
+      {({ addButton, components, form }) => (
+        <ImageLoader
+          onData={(data) => dispatch({ type: 'addImage', data })}
+          initialData={imgData ?? undefined}
+          components={components}
+          addButton={addButton}
+          form={form}
+        >
+          <h3>Edit image</h3>
+        </ImageLoader>
+      )}
+    </ComponentContainer>
   );
 };
 
