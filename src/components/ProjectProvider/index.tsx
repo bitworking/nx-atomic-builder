@@ -231,10 +231,15 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
             acc.components.find((component) => component.name === imageRef.componentName) ?? null;
 
           if (!component) {
+            const componentFromState =
+              state.components.find((component) => component.name === imageRef.componentName) ??
+              null;
+
             (component = {
               id: components.length,
               name: imageRef.componentName,
-              props: {},
+              props: componentFromState?.props ?? {},
+              category: componentFromState?.category ?? undefined,
             }),
               (components = [...components, component]);
           }
