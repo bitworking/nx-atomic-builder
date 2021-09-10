@@ -2,7 +2,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import Link from 'next/link';
 import { ProjectProvider } from 'components/ProjectProvider';
-import { Navi } from 'components/Navi/Navi';
+import { Navi } from 'components/Navi';
 import 'styles/globals.css';
 import styles from 'styles/Home.module.css';
 

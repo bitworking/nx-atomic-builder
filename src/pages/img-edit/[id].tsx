@@ -40,7 +40,7 @@ const Page: NextPage = () => {
           addButton={addButton}
           form={form}
         >
-          <h1>Edit image</h1>
+          <h1>Edit image : {imgData.name}</h1>
         </ImageLoader>
       )}
     </ComponentContainer>

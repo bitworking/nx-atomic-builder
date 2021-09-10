@@ -64,14 +64,13 @@ const Page: NextPage = () => {
               </Link>
             )}
           </div>
+
+          <h1>
+            Edit component variant : {component?.name}(
+            {imageRef?.variant ?? `variant ${imageRef?.id}`})
+          </h1>
+
           <div className="header__container">
-            <div className="header__col">
-              <div>
-                <h1>
-                  {component?.name} : {imageRef?.variant ?? `variant ${imageRef?.id}`}
-                </h1>
-              </div>
-            </div>
             <div className="header__col">
               <div>{form}</div>
             </div>

@@ -95,11 +95,10 @@ const Page: NextPage = () => {
 
   return (
     <>
+      <h1>Edit component : {component.name}</h1>
       <div className="header__container">
         <div className="header__col">
           <div>
-            <h1>{component.name}</h1>
-
             <div className="panel">
               <h4>Parents:</h4>
               {components.parents?.map((component) => (
