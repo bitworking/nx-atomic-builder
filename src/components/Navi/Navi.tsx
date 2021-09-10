@@ -22,13 +22,16 @@ export const Navi = () => {
       </ul>
       <h3>Images</h3>
       <ul>
-        {state.images.sort(compareField('name')).map((img) => (
-          <li key={img.id}>
-            <Link href={`/img-edit/${img.id}`}>
-              <a>{img.name}</a>
-            </Link>
-          </li>
-        ))}
+        {state.images
+          .map((c) => c)
+          .sort(compareField('name'))
+          .map((img) => (
+            <li key={img.id}>
+              <Link href={`/img-edit/${img.id}`}>
+                <a>{img.name}</a>
+              </Link>
+            </li>
+          ))}
       </ul>
       <h3>Components</h3>
       <ul>
@@ -36,24 +39,30 @@ export const Navi = () => {
           <li key={category}>
             <span className="category">{category || 'no category'}</span>
             <ul>
-              {components.sort(compareField('name')).map((component) => (
-                <li key={component.id}>
-                  <Link href={`/component/${component.id}`}>
-                    <a>{component.name}</a>
-                  </Link>
-                  <ul>
-                    {state.imageRefs.sort(compareField('variant')).map((imageRef) =>
-                      imageRef.componentId === component.id ? (
-                        <li key={imageRef.id}>
-                          <Link href={`/component-edit/${imageRef.id}`}>
-                            <a>{imageRef.variant ?? `variant ${imageRef.id}`}</a>
-                          </Link>
-                        </li>
-                      ) : null
-                    )}
-                  </ul>
-                </li>
-              ))}
+              {components
+                .map((c) => c)
+                .sort(compareField('name'))
+                .map((component) => (
+                  <li key={component.id}>
+                    <Link href={`/component/${component.id}`}>
+                      <a>{component.name}</a>
+                    </Link>
+                    <ul>
+                      {state.imageRefs
+                        .map((c) => c)
+                        .sort(compareField('variant'))
+                        .map((imageRef) =>
+                          imageRef.componentId === component.id ? (
+                            <li key={imageRef.id}>
+                              <Link href={`/component-edit/${imageRef.id}`}>
+                                <a>{imageRef.variant ?? `variant ${imageRef.id}`}</a>
+                              </Link>
+                            </li>
+                          ) : null
+                        )}
+                    </ul>
+                  </li>
+                ))}
             </ul>
           </li>
         ))}
