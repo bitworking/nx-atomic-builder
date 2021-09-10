@@ -29,7 +29,9 @@ const Page: NextPage = () => {
 
       <ProjectLoader />
 
-      <button onClick={() => download('atomic-builder.json', state)}>Download</button>
+      <button onClick={() => download('atomic-builder.json', { ...state, _imageCache: undefined })}>
+        Download
+      </button>
 
       <button onClick={() => dispatch({ type: 'reset' })}>Reset Project</button>
     </>

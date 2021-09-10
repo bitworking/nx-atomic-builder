@@ -78,7 +78,7 @@ const Page: NextPage = () => {
           </div>
 
           <h1>
-            Edit component variant : {component?.name}(
+            Edit component variant : {component?.name} (
             {imageRef?.variant ?? `variant ${imageRef?.id}`})
           </h1>
 

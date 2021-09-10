@@ -98,7 +98,11 @@ export const ComponentContainer = ({
   const form = (
     <>
       {selectedImageRef && (
-        <FormComponent imageRef={selectedImageRef} onData={(data) => updateImageRef(data, true)} />
+        <FormComponent
+          imageRef={selectedImageRef}
+          setSelectedImageRef={setSelectedImageRef}
+          onData={(data) => updateImageRef(data, true)}
+        />
       )}
     </>
   );

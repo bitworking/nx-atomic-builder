@@ -136,8 +136,15 @@ const Page: NextPage = () => {
                     : `/img-edit/${imageRef.imageId}`
                 }
               >
-                <a>Got to definition</a>
+                <a className="link-list">Got to definition</a>
               </Link>
+
+              <a
+                className="link-list"
+                onClick={() => dispatch({ type: 'removeImageRef', imageRef })}
+              >
+                Delete
+              </a>
             </p>
             <div style={{ padding: 10, border: '1px solid #ccc' }}>
               <Link href={`/component-edit/${imageRef.id}`}>

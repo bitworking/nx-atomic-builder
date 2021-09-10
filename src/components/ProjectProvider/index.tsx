@@ -1,18 +1,21 @@
-import {
-  createContext,
-  Dispatch,
-  ReactNode,
-  useContext,
-  useReducer,
-  useState,
-  useEffect,
-} from 'react';
+import { createContext, Dispatch, ReactNode, useContext, useReducer, useEffect } from 'react';
 
 export type ProjectData = {
   name: string;
   images: ImageData[];
   imageRefs: ImageRef[];
   components: ComponentData[];
+  _imageCache?: ImageCache[];
+};
+
+export type ImageCache = {
+  imageRefId: number;
+  imageId: number;
+  data: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 };
 
 export type ImageData = {
@@ -118,6 +121,21 @@ export type ActionReset = {
   type: 'reset';
 };
 
+export type ActionSaveToImageCache = {
+  type: 'saveToImageCache';
+  imageRef: ImageRef;
+  data: string;
+};
+
+export type ActionClearImageCache = {
+  type: 'clearImageCache';
+};
+
+export type ActionRemoveImageRef = {
+  type: 'removeImageRef';
+  imageRef: ImageRef;
+};
+
 export type Action =
   | ActionAddImage
   | ActionAddComponent
@@ -126,7 +144,10 @@ export type Action =
   | ActionUpdateImageRef
   | ActionBuildComponents
   | ActionImportProject
-  | ActionReset;
+  | ActionReset
+  | ActionSaveToImageCache
+  | ActionClearImageCache
+  | ActionRemoveImageRef;
 
 const reducer = (state: ProjectData, action: Action): ProjectData => {
   if (action.type === 'addImage') {
@@ -218,12 +239,62 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
   }
   if (action.type === 'reset') {
     return {
-      name: '',
-      images: [],
-      imageRefs: [],
-      components: [],
+      ...initialValue.state,
     };
   }
+  if (action.type === 'saveToImageCache') {
+    const exists = state._imageCache?.find((cache) => cache.imageRefId === action.imageRef.id);
+
+    if (exists) {
+      const mapped = (state._imageCache ?? []).map((imageCache) => {
+        if (imageCache.imageRefId === action.imageRef.id) {
+          return {
+            imageRefId: action.imageRef.id,
+            imageId: action.imageRef.imageId,
+            x: action.imageRef.x,
+            y: action.imageRef.y,
+            width: action.imageRef.width,
+            height: action.imageRef.height,
+            data: action.data,
+          };
+        }
+        return imageCache;
+      });
+
+      return { ...state, _imageCache: mapped };
+    }
+
+    return {
+      ...state,
+      _imageCache: [
+        ...(state._imageCache ?? []),
+        {
+          imageRefId: action.imageRef.id,
+          imageId: action.imageRef.imageId,
+          x: action.imageRef.x,
+          y: action.imageRef.y,
+          width: action.imageRef.width,
+          height: action.imageRef.height,
+          data: action.data,
+        },
+      ],
+    };
+  }
+  if (action.type === 'clearImageCache') {
+    return {
+      ...state,
+      _imageCache: undefined,
+    };
+  }
+  if (action.type === 'removeImageRef') {
+    const imageRefs = state.imageRefs.filter((imageRef) => imageRef.id !== action.imageRef.id);
+
+    return {
+      ...state,
+      imageRefs,
+    };
+  }
+
   return state;
 };
 

@@ -2,6 +2,7 @@ import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { ImageData, useProjectContext } from 'components/ProjectProvider';
 import { FormImageData } from 'components/FormImageData';
 import { resaveDataUrl, resizeDataUrl } from 'libs/utils/image';
+import { LoadingIndicator } from 'components/LoadingIndicator';
 import { ImageLoaderProps } from './ImageLoader.types';
 import styles from './ImageLoader.module.css';
 
@@ -18,17 +19,23 @@ export const ImageLoader = ({
   const dropzone = useRef<HTMLDivElement | null>(null);
   const [dropzoneActive, setDropzoneActive] = useState(false);
   const { uid } = useProjectContext();
-
   const [data, setData] = useState<string | ArrayBuffer | null>(initialData?.data ?? null);
   const [rawData, setRawData] = useState<string | ArrayBuffer | null>(null);
   const [imgData, setImgData] = useState<ImageData>(
     initialData ?? { id: uid('image'), name: '', data: '', width: 0, height: 0 }
   );
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setImgData({ id: uid('image'), name: '', data: '', width: 0, height: 0 });
     setData(null);
   }, [reset]);
+
+  useEffect(() => {
+    if (!data) {
+      setLoading(false);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (initialData) {
@@ -50,15 +57,8 @@ export const ImageLoader = ({
       height: img.current?.naturalHeight ?? 0,
     };
 
-    // console.log('resize');
-    //
-    // const scaled = await resizeDataUrl(data as string, {
-    //   width: imageData.width,
-    //   height: imageData.height,
-    // });
-    // imageData.data = scaled;
-
     setImgData(imageData);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -96,6 +96,7 @@ export const ImageLoader = ({
     dropzone.current?.addEventListener('drop', (event) => {
       event.preventDefault();
       setDropzoneActive(false);
+      setLoading(true);
 
       const file = event.dataTransfer?.files[0];
 
@@ -126,6 +127,8 @@ export const ImageLoader = ({
         const arrayBuffer = await e.clipboardData.files[0].arrayBuffer();
         const blob = new Blob([arrayBuffer]);
 
+        setLoading(true);
+
         const reader = new FileReader();
         reader.onload = async (event) => {
           const base64 = event.target?.result;
@@ -143,6 +146,7 @@ export const ImageLoader = ({
 
   return (
     <>
+      {loading && <LoadingIndicator />}
       {children}
       <div className="header__container">
         <div className="header__col">

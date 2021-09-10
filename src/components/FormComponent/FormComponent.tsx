@@ -1,15 +1,21 @@
 import { SyntheticEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ComponentData, ImageData, ImageRef } from 'components/ProjectProvider';
+import { ComponentData, ImageData, ImageRef, useProjectContext } from 'components/ProjectProvider';
 
 type FormComponentProps = {
   imageRef: ImageRef;
   onData: (data: any) => void;
+  setSelectedImageRef: (imageRef: ImageRef | null) => void;
 };
 
-export const FormComponent = ({ imageRef: imageRefDefault, onData }: FormComponentProps) => {
+export const FormComponent = ({
+  imageRef: imageRefDefault,
+  onData,
+  setSelectedImageRef,
+}: FormComponentProps) => {
   const [isValid, setIsValid] = useState(false);
   const [imageRef, setImageRef] = useState(imageRefDefault);
+  const { dispatch } = useProjectContext();
 
   useEffect(() => {
     onData && onData(imageRef);
@@ -63,9 +69,20 @@ export const FormComponent = ({ imageRef: imageRefDefault, onData }: FormCompone
       </div>
       <div className="form__row">
         {imageRef.componentName && (
-          <Link href={`/component-edit/${imageRef.id}`}>
-            <a>Go to component variant</a>
-          </Link>
+          <>
+            <Link href={`/component-edit/${imageRef.id}`}>
+              <a className="link-list">Go to component variant</a>
+            </Link>
+            <a
+              className="link-list"
+              onClick={() => {
+                dispatch({ type: 'removeImageRef', imageRef });
+                setSelectedImageRef(null);
+              }}
+            >
+              Delete
+            </a>
+          </>
         )}
       </div>
       {/*<div>{<button type="submit">Save</button>}</div>*/}
