@@ -70,6 +70,14 @@ li:first-child {
   font-weight: bold;
 }
 
+.text-checkbox {
+  display: inline-flex;
+  align-items: center;
+}
+.text-checkbox span {
+  margin-right: 5px;
+}
+
 .panel {
   margin-bottom: 30px;
 }

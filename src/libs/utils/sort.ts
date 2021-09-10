@@ -3,7 +3,7 @@ export const compareEntries = () => {
 };
 
 export const compareField = (field: string) => {
-  return (a: any, b: any) => a[field].localeCompare(b[field]);
+  return (a: any, b: any) => (a[field] ?? '').localeCompare(b[field]);
 };
 
 export const groupBy = <T, K extends keyof T>(array: T[], field: K): [string, T[]][] => {
