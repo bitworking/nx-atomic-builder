@@ -43,6 +43,12 @@ export const ComponentContainer = ({
         : image.imageId === imageData.id && image.parentImageRefId === parentImageRef?.id
     );
     setImageRefs(imageRefs);
+
+    // replace selectedImageRef (fixes reset of position after form change)
+    if (selectedImageRef) {
+      const imageRef = state.imageRefs.find((imageRef) => imageRef.id === selectedImageRef.id);
+      setSelectedImageRef(imageRef ?? null);
+    }
   }, [state, imageData, parentComponentData, parentImageRef]);
 
   useEffect(() => {
