@@ -1,6 +1,7 @@
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { ImageData, useProjectContext } from 'components/ProjectProvider';
 import { FormImageData } from 'components/FormImageData';
+import { resaveDataUrl, resizeDataUrl } from 'libs/utils/image';
 import { ImageLoaderProps } from './ImageLoader.types';
 import styles from './ImageLoader.module.css';
 
@@ -19,6 +20,7 @@ export const ImageLoader = ({
   const { uid } = useProjectContext();
 
   const [data, setData] = useState<string | ArrayBuffer | null>(initialData?.data ?? null);
+  const [rawData, setRawData] = useState<string | ArrayBuffer | null>(null);
   const [imgData, setImgData] = useState<ImageData>(
     initialData ?? { id: uid('image'), name: '', data: '', width: 0, height: 0 }
   );
@@ -40,13 +42,23 @@ export const ImageLoader = ({
     onData && onData(imgData);
   };
 
-  const onLoad = (event: SyntheticEvent<HTMLImageElement>) => {
-    setImgData({
+  const onLoad = async (event: SyntheticEvent<HTMLImageElement>) => {
+    const imageData = {
       ...imgData,
       data: data as string,
       width: img.current?.naturalWidth ?? 0,
       height: img.current?.naturalHeight ?? 0,
-    });
+    };
+
+    // console.log('resize');
+    //
+    // const scaled = await resizeDataUrl(data as string, {
+    //   width: imageData.width,
+    //   height: imageData.height,
+    // });
+    // imageData.data = scaled;
+
+    setImgData(imageData);
   };
 
   useEffect(() => {
@@ -95,8 +107,13 @@ export const ImageLoader = ({
       const reader = new FileReader();
       reader.readAsDataURL(file);
 
-      reader.addEventListener('loadend', () => {
-        setData(reader.result);
+      reader.addEventListener('loadend', async () => {
+        if (typeof reader.result === 'string') {
+          const resavedData = await resaveDataUrl(reader.result);
+          setData(resavedData);
+        } else {
+          setData(null);
+        }
       });
     });
 
@@ -110,9 +127,14 @@ export const ImageLoader = ({
         const blob = new Blob([arrayBuffer]);
 
         const reader = new FileReader();
-        reader.onload = function (event) {
+        reader.onload = async (event) => {
           const base64 = event.target?.result;
-          setData(base64 ?? null);
+          if (typeof base64 === 'string') {
+            const resavedData = await resaveDataUrl(base64);
+            setData(resavedData);
+          } else {
+            setData(null);
+          }
         };
         reader.readAsDataURL(blob);
       }
@@ -145,9 +167,7 @@ export const ImageLoader = ({
       </div>
 
       <>
-        <h4>Drop image file here or paste image from clipboard</h4>
-
-        {addButton}
+        <p>Drop image file here or paste image from clipboard</p>
 
         <div>
           <div
@@ -155,22 +175,25 @@ export const ImageLoader = ({
             className={`${styles.imageLoader__dropzone} ${
               dropzoneActive && styles.imageLoader__dropzone__active
             }`}
-          >
-            {data && (
-              <>
-                <div className={`${styles.imageLoader__imgContainer} image-container`}>
-                  <img
-                    ref={img}
-                    className={styles.imageLoader__imgContainer__img}
-                    src={data as string}
-                    onLoad={onLoad}
-                  />
-                  {components}
-                </div>
-              </>
-            )}
-          </div>
+          ></div>
         </div>
+
+        {data && (
+          <>
+            {addButton}
+            <div>
+              <div className={`${styles.imageLoader__imgContainer} image-container`}>
+                <img
+                  ref={img}
+                  className={styles.imageLoader__imgContainer__img}
+                  src={data as string}
+                  onLoad={onLoad}
+                />
+                {components}
+              </div>
+            </div>
+          </>
+        )}
       </>
     </>
   );

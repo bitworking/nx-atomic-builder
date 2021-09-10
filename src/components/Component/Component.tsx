@@ -45,6 +45,10 @@ export const ComponentContainer = ({
     setImageRefs(imageRefs);
   }, [state, imageData, parentComponentData, parentImageRef]);
 
+  useEffect(() => {
+    setSelectedImageRef(null);
+  }, [parentComponentData]);
+
   if (!imageData) {
     return null;
   }

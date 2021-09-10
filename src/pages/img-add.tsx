@@ -1,22 +1,33 @@
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
-import styles from 'styles/Home.module.css';
-import { ImageLoader } from 'components/ImageLoader';
-import { useProjectContext } from 'components/ProjectProvider';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { ImageLoader } from 'components/ImageLoader';
+import { ImageData, useProjectContext } from 'components/ProjectProvider';
+import styles from 'styles/Home.module.css';
 
 const Page: NextPage = () => {
   const [reset, setReset] = useState({});
   const { dispatch } = useProjectContext();
   const router = useRouter();
 
-  router.events.on('routeChangeComplete', () => {
+  useEffect(() => {
+    const handler = () => {
+      setReset({});
+    };
+    router.events.on('routeChangeComplete', handler);
+    return () => {
+      router.events.off('routeChangeComplete', handler);
+    };
+  }, []);
+
+  const addImage = (data: ImageData) => {
+    dispatch({ type: 'addImage', data });
     setReset({});
-  });
+  };
 
   return (
-    <ImageLoader reset={reset} onData={(data) => dispatch({ type: 'addImage', data })}>
-      <h3>Add image</h3>
+    <ImageLoader reset={reset} onData={addImage}>
+      <h1>Add image</h1>
     </ImageLoader>
   );
 };

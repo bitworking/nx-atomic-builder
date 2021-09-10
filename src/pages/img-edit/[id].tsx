@@ -1,10 +1,11 @@
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
-import styles from 'styles/Home.module.css';
+import { useRouter } from 'next/router';
 import { ImageLoader } from 'components/ImageLoader';
 import { ImageData, useProjectContext } from 'components/ProjectProvider';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
-import { ComponentContainer } from '../../components/Component';
+import styles from 'styles/Home.module.css';
+
+import { ComponentContainer } from 'components/Component';
 
 const Page: NextPage = () => {
   const { dispatch, state } = useProjectContext();
@@ -39,7 +40,7 @@ const Page: NextPage = () => {
           addButton={addButton}
           form={form}
         >
-          <h3>Edit image</h3>
+          <h1>Edit image</h1>
         </ImageLoader>
       )}
     </ComponentContainer>

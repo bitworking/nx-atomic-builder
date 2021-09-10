@@ -93,14 +93,14 @@ export const ProjectLoader = () => {
   }, []);
 
   return (
-    <>
-      <h4>Drop project file here or paste it from clipboard</h4>
+    <div>
+      <p>Drop project file here or paste it from clipboard</p>
       <div
         ref={dropzone}
         className={`${styles.projectLoader__dropzone} ${
           dropzoneActive && styles.projectLoader__dropzone__active
         }`}
       ></div>
-    </>
+    </div>
   );
 };

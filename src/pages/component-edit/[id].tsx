@@ -1,13 +1,13 @@
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import styles from 'styles/Home.module.css';
+import { useRouter } from 'next/router';
 import { ImageLoader } from 'components/ImageLoader';
 import { ComponentData, ImageData, ImageRef, useProjectContext } from 'components/ProjectProvider';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { ComponentContainer } from 'components/Component';
+import { Image } from 'components/Image';
 import { useEffectAsync } from 'libs/hooks/useEffectAsync';
-import { Image } from '../../components/Image';
+import styles from 'styles/Home.module.css';
 
 const Page: NextPage = () => {
   const { dispatch, state } = useProjectContext();
@@ -43,7 +43,7 @@ const Page: NextPage = () => {
       setImageRef(null);
       setImageData(null);
     }
-  }, [id, state]);
+  }, [id]); // TODO: state as dep needed?
 
   if (!component) {
     return <div>No component found</div>;
@@ -67,9 +67,9 @@ const Page: NextPage = () => {
           <div className="header__container">
             <div className="header__col">
               <div>
-                <h2>
+                <h1>
                   {component?.name} : {imageRef?.variant ?? `variant ${imageRef?.id}`}
-                </h2>
+                </h1>
               </div>
             </div>
             <div className="header__col">

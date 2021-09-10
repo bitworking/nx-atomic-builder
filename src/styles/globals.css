@@ -1,9 +1,8 @@
 html,
-body {
+body, input {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Trebuchet MS", sans-serif;
 }
 
 a {
@@ -23,14 +22,43 @@ a:hover {
   background: #89dc18;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+h4 {
+  margin-bottom: 15px;
+}
+
+h5, h6 {
+  margin-bottom: 15px;
+  font-weight: normal;
+}
+
+h1 {
+  font-size: 1.7rem;
+}
+
+p {
+  margin-bottom: 15px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
   margin-bottom: 30px;
 }
 
-h4, h5, h6 {
-  margin-top: 0;
-  margin-bottom: 10px;
+ul ul {
+  margin-left: 40px;
+  margin-bottom: 0;
+}
+
+li {
+  margin-bottom: 7px;
 }
 
 .panel {
@@ -47,7 +75,55 @@ h4, h5, h6 {
 }
 
 button {
+  background-color: #FFFFFF;
+  border: 1px solid rgb(209,213,219);
+  border-radius: .5rem;
+  box-sizing: border-box;
+  color: #111827;
+  font-weight: bold;
+  line-height: 1.25rem;
+  padding: .5rem 1rem;
+  text-align: center;
+  text-decoration: none #D1D5DB solid;
+  text-decoration-thickness: auto;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  
   margin-bottom: 15px;
+  margin-right: 15px;
+}
+
+button:hover {
+  background-color: rgb(249,250,251);
+}
+
+button:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+button:focus-visible {
+  box-shadow: none;
+}
+
+input[type="text"] {
+  background-color: #FFFFFF;
+  border: 1px solid rgb(209,213,219);
+  border-radius: .5rem;
+  padding: .5rem 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+input[type="text"]:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+input[type="text"]:focus-visible {
+  box-shadow: none;
 }
 
 .image-container {
@@ -59,12 +135,16 @@ button {
   display: flex;
   background-color: #f0f0f0;
   padding: 30px;
-  margin-bottom: 30px;
-  min-height: 200px;
+  margin-bottom: 60px;
+  min-height: 250px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 7px 12px -10px #000000;
 }
 
 .header__col > div {
-  margin-right: 50px;
+  margin-right: 100px;
 }
 
 .form__row {

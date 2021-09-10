@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
-import styles from 'styles/Home.module.css';
+import { useRouter } from 'next/router';
 import { ImageLoader } from 'components/ImageLoader';
 import {
   ComponentData,
@@ -9,11 +10,10 @@ import {
   ProjectData,
   useProjectContext,
 } from 'components/ProjectProvider';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { ComponentContainer } from 'components/Component';
-import { useEffectAsync } from 'libs/hooks/useEffectAsync';
 import { Image } from 'components/Image';
+import { useEffectAsync } from 'libs/hooks/useEffectAsync';
+import styles from 'styles/Home.module.css';
 
 const Page: NextPage = () => {
   const { dispatch, state } = useProjectContext();
@@ -98,7 +98,7 @@ const Page: NextPage = () => {
       <div className="header__container">
         <div className="header__col">
           <div>
-            <h2>{component.name}</h2>
+            <h1>{component.name}</h1>
 
             <div className="panel">
               <h4>Parents:</h4>

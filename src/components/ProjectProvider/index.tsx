@@ -114,6 +114,10 @@ export type ActionImportProject = {
   data: ProjectData;
 };
 
+export type ActionReset = {
+  type: 'reset';
+};
+
 export type Action =
   | ActionAddImage
   | ActionAddComponent
@@ -121,7 +125,8 @@ export type Action =
   | ActionCreateImageRef
   | ActionUpdateImageRef
   | ActionBuildComponents
-  | ActionImportProject;
+  | ActionImportProject
+  | ActionReset;
 
 const reducer = (state: ProjectData, action: Action): ProjectData => {
   if (action.type === 'addImage') {
@@ -210,6 +215,14 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
   }
   if (action.type === 'importProject') {
     return { ...action.data };
+  }
+  if (action.type === 'reset') {
+    return {
+      name: '',
+      images: [],
+      imageRefs: [],
+      components: [],
+    };
   }
   return state;
 };

@@ -1,9 +1,11 @@
 .imageLoader__dropzone {
   border: 1px solid lightgray;
-  min-width: 300px;
-  min-height: 300px;
+  width: 100%;
+  max-width: 400px;
+  height: 100px;
   background: #f0f0f0;
   display: inline-block;
+  margin-bottom: 30px;
 }
 
 .imageLoader__dropzone__active {

@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
-import styles from 'styles/Home.module.css';
 import { useProjectContext } from 'components/ProjectProvider';
 import { ProjectLoader } from 'components/ProjectLoader';
+import styles from 'styles/Home.module.css';
 
 const download = (filename: string, json: any) => {
   var element = document.createElement('a');
@@ -21,16 +21,17 @@ const download = (filename: string, json: any) => {
 };
 
 const Page: NextPage = () => {
-  const { state } = useProjectContext();
+  const { state, dispatch } = useProjectContext();
 
   return (
     <>
-      <h3>Upload atomic-builder file</h3>
+      <h1>Upload atomic-builder file</h1>
 
       <ProjectLoader />
 
-      <p>&nbsp;</p>
       <button onClick={() => download('atomic-builder.json', state)}>Download</button>
+
+      <button onClick={() => dispatch({ type: 'reset' })}>Reset Project</button>
     </>
   );
 };
