@@ -2,19 +2,15 @@ import { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ImageLoader } from 'components/ImageLoader';
 import {
   ComponentData,
-  ImageData,
   ImageRef,
   ProjectData,
   useProjectContext,
 } from 'components/ProjectProvider';
-import { ComponentContainer } from 'components/Component';
 import { Image } from 'components/Image';
-import { useEffectAsync } from 'libs/hooks/useEffectAsync';
-import styles from 'styles/Home.module.css';
-import { FormComponent } from '../../components/FormComponent';
+import { FormComponent } from 'components/FormComponent';
+import { compareField } from '../../libs/utils/sort';
 
 const Page: NextPage = () => {
   const { dispatch, state } = useProjectContext();
@@ -132,36 +128,39 @@ const Page: NextPage = () => {
       </div>
 
       <div>
-        {imageRefs.map((imageRef) => (
-          <div key={imageRef.id} className="panel">
-            <h4>Variant: {imageRef.variant ?? imageRef.id}</h4>
-            <p>
-              <Link
-                href={
-                  imageRef.parentImageRefId !== null
-                    ? `/component-edit/${imageRef.parentImageRefId}`
-                    : `/img-edit/${imageRef.imageId}`
-                }
-              >
-                <a className="link-list">Got to definition</a>
-              </Link>
+        {imageRefs
+          .map((i) => i)
+          .sort(compareField('variant'))
+          .map((imageRef) => (
+            <div key={imageRef.id} className="panel">
+              <h4>Variant: {imageRef.variant ?? imageRef.id}</h4>
+              <p>
+                <Link
+                  href={
+                    imageRef.parentImageRefId !== null
+                      ? `/component-edit/${imageRef.parentImageRefId}`
+                      : `/img-edit/${imageRef.imageId}`
+                  }
+                >
+                  <a className="link-list">Got to definition</a>
+                </Link>
 
-              <a
-                className="link-list"
-                onClick={() => dispatch({ type: 'removeImageRef', imageRef })}
-              >
-                Delete
-              </a>
-            </p>
-            <div style={{ padding: 10, border: '1px solid #ccc' }}>
-              <Link href={`/component-edit/${imageRef.id}`}>
-                <a>
-                  <Image imageRef={imageRef} />
+                <a
+                  className="link-list"
+                  onClick={() => dispatch({ type: 'removeImageRef', imageRef })}
+                >
+                  Delete
                 </a>
-              </Link>
+              </p>
+              <div style={{ padding: 10, border: '1px solid #ccc' }}>
+                <Link href={`/component-edit/${imageRef.id}`}>
+                  <a>
+                    <Image imageRef={imageRef} />
+                  </a>
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </>
   );
