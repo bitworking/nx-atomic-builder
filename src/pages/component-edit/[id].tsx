@@ -59,9 +59,21 @@ const Page: NextPage = () => {
         <>
           <div className="back-link">
             {imageRef && (
-              <Link href={`/component/${imageRef.componentId}`}>
-                <a>Go to component</a>
-              </Link>
+              <>
+                <Link href={`/component/${imageRef.componentId}`}>
+                  <a className="link-list">Go to component</a>
+                </Link>
+
+                <Link
+                  href={
+                    imageRef.parentImageRefId !== null
+                      ? `/component-edit/${imageRef.parentImageRefId}`
+                      : `/img-edit/${imageRef.imageId}`
+                  }
+                >
+                  <a className="link-list">Got to definition</a>
+                </Link>
+              </>
             )}
           </div>
 

@@ -64,7 +64,7 @@ export const FormComponent = ({ imageRef: imageRefDefault, onData }: FormCompone
       <div className="form__row">
         {imageRef.componentName && (
           <Link href={`/component-edit/${imageRef.id}`}>
-            <a>Edit</a>
+            <a>Go to component variant</a>
           </Link>
         )}
       </div>

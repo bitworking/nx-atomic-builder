@@ -128,6 +128,17 @@ const Page: NextPage = () => {
         {imageRefs.map((imageRef) => (
           <div key={imageRef.id} className="panel">
             <h4>Variant: {imageRef.variant ?? imageRef.id}</h4>
+            <p>
+              <Link
+                href={
+                  imageRef.parentImageRefId !== null
+                    ? `/component-edit/${imageRef.parentImageRefId}`
+                    : `/img-edit/${imageRef.imageId}`
+                }
+              >
+                <a>Got to definition</a>
+              </Link>
+            </p>
             <div style={{ padding: 10, border: '1px solid #ccc' }}>
               <Link href={`/component-edit/${imageRef.id}`}>
                 <a>
