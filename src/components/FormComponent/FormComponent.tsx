@@ -3,87 +3,49 @@ import Link from 'next/link';
 import { ComponentData, ImageData, ImageRef, useProjectContext } from 'components/ProjectProvider';
 
 type FormComponentProps = {
-  imageRef: ImageRef;
-  onData: (data: any) => void;
-  setSelectedImageRef: (imageRef: ImageRef | null) => void;
+  component: ComponentData;
+  onData: (data: ComponentData) => void;
 };
 
-export const FormComponent = ({
-  imageRef: imageRefDefault,
-  onData,
-  setSelectedImageRef,
-}: FormComponentProps) => {
+export const FormComponent = ({ component: componentDefault, onData }: FormComponentProps) => {
   const [isValid, setIsValid] = useState(false);
-  const [imageRef, setImageRef] = useState(imageRefDefault);
+  const [component, setComponent] = useState(componentDefault);
   const { dispatch } = useProjectContext();
 
   useEffect(() => {
-    onData && onData(imageRef);
-  }, [imageRef]);
+    onData && onData(component);
+  }, [component]);
 
   useEffect(() => {
-    setImageRef(imageRefDefault);
-  }, [imageRefDefault]);
+    setComponent(componentDefault);
+  }, [componentDefault]);
 
   const onSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onData && onData(imageRef);
+    onData && onData(component);
   };
 
   return (
     <form onSubmit={onSubmit}>
       <div className="form__row">
         <label>
-          <span>Id: {imageRef.id}</span>
+          <span>Id: {component.id}</span>
         </label>
       </div>
       <div className="form__row">
         <label>
-          <span>Name: </span>
+          <span>Category: </span>
           <input
             type="text"
-            value={imageRef.componentName ?? ''}
+            value={component.category ?? ''}
             onChange={(event) =>
-              setImageRef({
-                ...imageRef,
-                componentName: event.currentTarget.value !== '' ? event.currentTarget.value : null,
+              setComponent({
+                ...component,
+                category: event.currentTarget.value !== '' ? event.currentTarget.value : undefined,
               })
             }
           />
         </label>
-      </div>
-      <div className="form__row">
-        <label>
-          <span>Variant: </span>
-          <input
-            type="text"
-            value={imageRef.variant ?? ''}
-            onChange={(event) =>
-              setImageRef({
-                ...imageRef,
-                variant: event.currentTarget.value !== '' ? event.currentTarget.value : undefined,
-              })
-            }
-          />
-        </label>
-      </div>
-      <div className="form__row">
-        {imageRef.componentName && (
-          <>
-            <Link href={`/component-edit/${imageRef.id}`}>
-              <a className="link-list">Go to component variant</a>
-            </Link>
-            <a
-              className="link-list"
-              onClick={() => {
-                dispatch({ type: 'removeImageRef', imageRef });
-                setSelectedImageRef(null);
-              }}
-            >
-              Delete
-            </a>
-          </>
-        )}
       </div>
       {/*<div>{<button type="submit">Save</button>}</div>*/}
     </form>

@@ -14,6 +14,7 @@ import { ComponentContainer } from 'components/Component';
 import { Image } from 'components/Image';
 import { useEffectAsync } from 'libs/hooks/useEffectAsync';
 import styles from 'styles/Home.module.css';
+import { FormComponent } from '../../components/FormComponent';
 
 const Page: NextPage = () => {
   const { dispatch, state } = useProjectContext();
@@ -121,6 +122,12 @@ const Page: NextPage = () => {
               )) ?? <span>Not using any component</span>}
             </div>
           </div>
+        </div>
+        <div className="header__col">
+          <FormComponent
+            component={component}
+            onData={(data) => dispatch({ type: 'updateComponent', component: data })}
+          />
         </div>
       </div>
 

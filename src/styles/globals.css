@@ -54,7 +54,7 @@ ul {
 }
 
 ul ul {
-  margin-left: 40px;
+  margin-left: 20px;
   margin-bottom: 0;
 }
 
@@ -64,6 +64,10 @@ li {
 
 li:first-child {
   margin-top: 7px;
+}
+
+.category {
+  font-weight: bold;
 }
 
 .panel {

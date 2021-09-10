@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, ReactNode } from 'react';
 import { Rnd } from 'react-rnd';
 import { ComponentData, ImageData, ImageRef, useProjectContext } from 'components/ProjectProvider';
-import { FormComponent } from 'components/FormComponent';
+import { FormComponentVariant } from 'components/FormComponentVariant';
 
 type ComponentContainerProps = {
   imageData: ImageData | null;
@@ -104,7 +104,7 @@ export const ComponentContainer = ({
   const form = (
     <>
       {selectedImageRef && (
-        <FormComponent
+        <FormComponentVariant
           imageRef={selectedImageRef}
           setSelectedImageRef={setSelectedImageRef}
           onData={(data) => updateImageRef(data, true)}

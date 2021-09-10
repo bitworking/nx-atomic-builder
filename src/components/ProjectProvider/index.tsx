@@ -95,6 +95,11 @@ export type ActionCreateComponent = {
   parentComponentId?: number;
 };
 
+export type ActionUpdateComponent = {
+  type: 'updateComponent';
+  component: ComponentData;
+};
+
 export type ActionCreateImageRef = {
   type: 'createImageRef';
   imageData: ImageData;
@@ -147,7 +152,8 @@ export type Action =
   | ActionReset
   | ActionSaveToImageCache
   | ActionClearImageCache
-  | ActionRemoveImageRef;
+  | ActionRemoveImageRef
+  | ActionUpdateComponent;
 
 const reducer = (state: ProjectData, action: Action): ProjectData => {
   if (action.type === 'addImage') {
@@ -171,6 +177,15 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
         },
       ],
     };
+  }
+  if (action.type === 'updateComponent') {
+    const mapped = state.components.map((component) => {
+      if (component.id === action.component.id) {
+        return action.component;
+      }
+      return component;
+    });
+    return { ...state, components: mapped };
   }
   if (action.type === 'createImageRef') {
     return {
@@ -312,9 +327,9 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
     return 0;
   };
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+  // useEffect(() => {
+  //   console.log(state);
+  // }, [state]);
 
   return (
     <ProjectContext.Provider value={{ state, dispatch, uid }}>{children}</ProjectContext.Provider>
