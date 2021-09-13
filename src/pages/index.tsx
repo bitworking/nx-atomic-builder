@@ -34,6 +34,10 @@ const Page: NextPage = () => {
       </button>
 
       <button onClick={() => dispatch({ type: 'reset' })}>Reset Project</button>
+
+      <button onClick={() => dispatch({ type: 'clearImageCache' })}>Clear Image Cache</button>
+
+      <button onClick={() => console.log(state)}>Log project data to console</button>
     </>
   );
 };

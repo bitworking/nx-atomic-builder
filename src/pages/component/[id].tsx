@@ -11,6 +11,7 @@ import {
 import { Image } from 'components/Image';
 import { FormComponent } from 'components/FormComponent';
 import { compareField } from 'libs/utils/sort';
+import { FormProps } from 'components/FormProps';
 
 const Page: NextPage = () => {
   const { dispatch, state } = useProjectContext();
@@ -120,6 +121,12 @@ const Page: NextPage = () => {
         </div>
         <div className="header__col">
           <FormComponent
+            component={component}
+            onData={(data) => dispatch({ type: 'updateComponent', component: data })}
+          />
+        </div>
+        <div className="header__col">
+          <FormProps
             component={component}
             onData={(data) => dispatch({ type: 'updateComponent', component: data })}
           />

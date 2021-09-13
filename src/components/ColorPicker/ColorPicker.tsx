@@ -1,4 +1,4 @@
-import { ImageData, useProjectContext } from 'components/ProjectProvider';
+import { useProjectContext } from 'components/ProjectProvider';
 
 export const ColorPicker = () => {
   const { dispatch } = useProjectContext();

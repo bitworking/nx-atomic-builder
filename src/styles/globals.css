@@ -145,6 +145,16 @@ input[type="text"]:focus-visible {
   box-shadow: none;
 }
 
+textarea {
+  background-color: #FFFFFF;
+  border: 1px solid rgb(209,213,219);
+  border-radius: .5rem;
+  padding: .5rem 1rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  min-height: 100px;
+  min-width: 250px;
+}
+
 .image-container {
   position: relative;
   display: inline-block;
@@ -162,7 +172,7 @@ input[type="text"]:focus-visible {
   box-shadow: 0 7px 12px -10px #000000;
 }
 
-.header__col > div {
+.header__col {
   margin-right: 100px;
 }
 
@@ -173,6 +183,10 @@ input[type="text"]:focus-visible {
 .form__row span {
   min-width: 80px;
   display: inline-block;
+}
+
+.form__row label {
+  display: flex;
 }
 
 .form__row button {

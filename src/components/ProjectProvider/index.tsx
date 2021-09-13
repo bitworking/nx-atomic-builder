@@ -28,8 +28,8 @@ export type ImageData = {
 };
 
 export type PropData = {
-  type: 'number' | 'string' | 'boolean' | 'children' | 'componentId';
-  isOptional?: boolean;
+  type: string;
+  isOptional: boolean;
 };
 
 export type PropsData = {
