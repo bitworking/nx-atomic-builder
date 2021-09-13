@@ -152,12 +152,8 @@ export const Component = ({
   return (
     <>
       <Rnd
+        className={isSelected ? 'component-variant component-variant--active' : 'component-variant'}
         ref={ref}
-        style={{
-          background: isSelected ? '#ff0000' : '#999',
-          opacity: 0.5,
-          border: '1px dashed #333',
-        }}
         minWidth={20}
         minHeight={20}
         bounds="parent"

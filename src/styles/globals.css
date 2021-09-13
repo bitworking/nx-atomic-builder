@@ -251,3 +251,17 @@ textarea {
 .link-button:hover {
   color: #000;
 }
+
+.component-variant {
+  /*border-style: solid;*/
+  /*border-width: 1px;*/
+  /*border-image: conic-gradient(black, white, black, white, black, white, black) 1;*/
+  border: 1px dashed #333;
+  background: #999;
+  opacity: 0.5;
+}
+
+.component-variant--active {
+  /*border-image: conic-gradient(red, yellow, lime, aqua, blue, magenta, red) 1;*/
+  background: #ff0000;
+}
