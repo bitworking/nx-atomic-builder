@@ -87,6 +87,11 @@ li:first-child {
   margin-bottom: 30px;
 }
 
+.link-list-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .link-list {
   margin-right: 15px;
   margin-bottom: 15px;
@@ -174,6 +179,10 @@ textarea {
 
 .header__col {
   margin-right: 100px;
+}
+
+.header__col:last-child {
+  margin-right: 0;
 }
 
 .form__row {
