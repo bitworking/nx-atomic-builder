@@ -10,7 +10,7 @@ const Page: NextPage = () => {
       <h1>Colors</h1>
       <div className="color-container">
         {state.colors?.map((color) => (
-          <Color hex={color.hex} />
+          <Color key={color.hex} color={color} />
         ))}
       </div>
     </>

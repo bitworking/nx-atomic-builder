@@ -9,6 +9,7 @@ export const Navi = () => {
 
   return (
     <>
+      <h2>Atomic Builder</h2>
       <h3>Pages</h3>
       <ul>
         <li>

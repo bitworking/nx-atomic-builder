@@ -1,11 +1,21 @@
+import { Color as ColorType, useProjectContext } from 'components/ProjectProvider';
+
 export type ColorProps = {
-  hex: string;
+  color: ColorType;
 };
 
-export const Color = ({ hex }: ColorProps) => {
+export const Color = ({ color }: ColorProps) => {
+  const { dispatch } = useProjectContext();
+
   return (
-    <div className="color" style={{ backgroundColor: hex }}>
-      {hex}
+    <div className="color-box">
+      <div className="color" style={{ backgroundColor: color.hex }} />
+      <div className="color-info">
+        <span>{color.hex}</span>
+        <a className="link-button" onClick={() => dispatch({ type: 'removeColor', color })}>
+          ✖
+        </a>
+      </div>
     </div>
   );
 };

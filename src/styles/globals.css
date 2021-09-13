@@ -205,9 +205,26 @@ input[type="text"]:focus-visible {
 .color {
   width: 100px;
   height: 100px;
-  margin-bottom: 15px;
-  margin-right: 15px;
   border: 1px solid #000;
 }
 
+.color-box {
+  margin-bottom: 15px;
+  margin-right: 15px;
+}
 
+.color-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.link-button {
+  text-decoration: none;
+  cursor: pointer;
+  color: #000;
+  font-size: 12px;
+}
+
+.link-button:hover {
+  color: #000;
+}

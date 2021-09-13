@@ -216,8 +216,9 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
           componentName: null,
           parentComponentId: action.parentComponentId,
           parentImageRefId: action.parentImageRefId,
-          x: action.parentImageRefId ? state.imageRefs[action.parentImageRefId].x + 0.1 : 0.1,
-          y: action.parentImageRefId ? state.imageRefs[action.parentImageRefId].y + 0.1 : 0.1,
+          x: action.parentImageRefId ? state.imageRefs[action.parentImageRefId].x + 0 : 0,
+          y: action.parentImageRefId ? state.imageRefs[action.parentImageRefId].y + 0 : 0,
+          // TODO: read image size and calculate percentage for e.g. 50x50px
           width: 0.2,
           height: 0.2,
         },
