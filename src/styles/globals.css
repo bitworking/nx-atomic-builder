@@ -74,6 +74,7 @@ li:first-child {
   display: inline-flex;
   align-items: center;
 }
+
 .text-checkbox span {
   margin-right: 5px;
 }
@@ -152,9 +153,9 @@ input[type="text"]:focus-visible {
 .header__container {
   display: flex;
   background-color: #f0f0f0;
-  padding: 30px;
+  padding: 15px 30px;
   margin-bottom: 60px;
-  min-height: 250px;
+  min-height: 150px;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -174,6 +175,14 @@ input[type="text"]:focus-visible {
   display: inline-block;
 }
 
+.form__row button {
+  margin-bottom: 0;
+}
+
+.form__row:last-child {
+  margin-bottom: 0;
+}
+
 .loading-indicator {
   z-index: 1001;
   position: fixed;
@@ -186,6 +195,19 @@ input[type="text"]:focus-visible {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
+}
+
+.color-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.color {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 15px;
+  margin-right: 15px;
+  border: 1px solid #000;
 }
 
 

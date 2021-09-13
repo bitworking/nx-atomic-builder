@@ -32,11 +32,11 @@ export const FormComponentVariant = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="form__row">
-        <label>
-          <span>Id: {imageRef.id}</span>
-        </label>
-      </div>
+      {/*<div className="form__row">*/}
+      {/*  <label>*/}
+      {/*    <span>Id: {imageRef.id}</span>*/}
+      {/*  </label>*/}
+      {/*</div>*/}
       <div className="form__row">
         <label>
           <span>Name: </span>

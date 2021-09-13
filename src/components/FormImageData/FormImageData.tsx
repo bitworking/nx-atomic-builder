@@ -25,11 +25,11 @@ export const FormImageData = ({ imgData, setImgData, onData }: FormImageDataProp
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="form__row">
-        <label>
-          <span>Id: {imgData.id}</span>
-        </label>
-      </div>
+      {/*<div className="form__row">*/}
+      {/*  <label>*/}
+      {/*    <span>Id: {imgData.id}</span>*/}
+      {/*  </label>*/}
+      {/*</div>*/}
       <div className="form__row">
         <label>
           <span>Name: </span>

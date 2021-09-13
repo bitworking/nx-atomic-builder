@@ -27,11 +27,11 @@ export const FormComponent = ({ component: componentDefault, onData }: FormCompo
 
   return (
     <form onSubmit={onSubmit}>
-      <div className="form__row">
-        <label>
-          <span>Id: {component.id}</span>
-        </label>
-      </div>
+      {/*<div className="form__row">*/}
+      {/*  <label>*/}
+      {/*    <span>Id: {component.id}</span>*/}
+      {/*  </label>*/}
+      {/*</div>*/}
       <div className="form__row">
         <label>
           <span>Category: </span>

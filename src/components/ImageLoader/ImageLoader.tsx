@@ -3,6 +3,7 @@ import { ImageData, useProjectContext } from 'components/ProjectProvider';
 import { FormImageData } from 'components/FormImageData';
 import { resaveDataUrl, resizeDataUrl } from 'libs/utils/image';
 import { LoadingIndicator } from 'components/LoadingIndicator';
+import { ColorPicker } from 'components/ColorPicker';
 import { ImageLoaderProps } from './ImageLoader.types';
 import styles from './ImageLoader.module.css';
 
@@ -156,6 +157,10 @@ export const ImageLoader = ({
                 {imgData?.width}x{imgData?.height} pixels
               </p>
             )}
+          </div>
+        </div>
+        <div className="header__col">
+          <div>
             {imgData && (
               <FormImageData
                 imgData={imgData}
@@ -185,6 +190,7 @@ export const ImageLoader = ({
         {data && (
           <>
             {addButton}
+            <ColorPicker />
             <div>
               <div className={`${styles.imageLoader__imgContainer} image-container`}>
                 <img

@@ -21,6 +21,13 @@ export const Navi = () => {
             <a>Add image</a>
           </Link>
         </li>
+        {(state.colors?.length ?? 0) > 0 && (
+          <li>
+            <Link href="/colors">
+              <a>Colors</a>
+            </Link>
+          </li>
+        )}
       </ul>
       <h3>Images</h3>
       <ul>
@@ -36,14 +43,16 @@ export const Navi = () => {
           ))}
       </ul>
       <h3>Components</h3>
-      <p className="text-checkbox">
-        <span>Show variants</span>
-        <input
-          type="checkbox"
-          checked={showVariants}
-          onChange={(event) => setShowVariants(event.currentTarget.checked)}
-        />
-      </p>
+      {state.components.length > 0 && (
+        <p className="text-checkbox">
+          <span>Show variants</span>
+          <input
+            type="checkbox"
+            checked={showVariants}
+            onChange={(event) => setShowVariants(event.currentTarget.checked)}
+          />
+        </p>
+      )}
 
       <ul>
         {groupBy(state.components, 'category').map(([category, components]) => (

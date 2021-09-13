@@ -5,6 +5,7 @@ export type ProjectData = {
   images: ImageData[];
   imageRefs: ImageRef[];
   components: ComponentData[];
+  colors?: Color[];
   _imageCache?: ImageCache[];
 };
 
@@ -54,6 +55,10 @@ export type ComponentData = {
   name: string;
   category?: string;
   props: PropsData;
+};
+
+export type Color = {
+  hex: string;
 };
 
 export type ProjectContextData = {
@@ -141,6 +146,16 @@ export type ActionRemoveImageRef = {
   imageRef: ImageRef;
 };
 
+export type ActionAddColor = {
+  type: 'addColor';
+  color: Color;
+};
+
+export type ActionRemoveColor = {
+  type: 'removeColor';
+  color: Color;
+};
+
 export type Action =
   | ActionAddImage
   | ActionAddComponent
@@ -153,7 +168,9 @@ export type Action =
   | ActionSaveToImageCache
   | ActionClearImageCache
   | ActionRemoveImageRef
-  | ActionUpdateComponent;
+  | ActionUpdateComponent
+  | ActionAddColor
+  | ActionRemoveColor;
 
 const reducer = (state: ProjectData, action: Action): ProjectData => {
   if (action.type === 'addImage') {
@@ -312,6 +329,23 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
     return {
       ...state,
       imageRefs,
+    };
+  }
+  if (action.type === 'addColor') {
+    const exists = (state.colors ?? []).find((color) => color.hex === action.color.hex);
+    if (exists) {
+      return state;
+    }
+    return {
+      ...state,
+      colors: [...(state.colors ?? []), action.color],
+    };
+  }
+  if (action.type === 'removeColor') {
+    const colors = (state.colors ?? []).filter((color) => color.hex !== action.color.hex);
+    return {
+      ...state,
+      colors,
     };
   }
 
