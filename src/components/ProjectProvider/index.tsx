@@ -89,6 +89,11 @@ export type ActionAddImage = {
   data: ImageData;
 };
 
+export type ActionRemoveImage = {
+  type: 'removeImage';
+  data: ImageData;
+};
+
 export type ActionAddComponent = {
   type: 'addComponent';
   data: ComponentData;
@@ -158,6 +163,7 @@ export type ActionRemoveColor = {
 
 export type Action =
   | ActionAddImage
+  | ActionRemoveImage
   | ActionAddComponent
   | ActionCreateComponent
   | ActionCreateImageRef
@@ -178,6 +184,11 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
     // TODO: use map instead for updating?
     const images = state.images.filter((image) => image.id !== action.data.id);
     return { ...state, images: [...images, action.data] };
+  }
+  if (action.type === 'removeImage') {
+    const images = state.images.filter((image) => image.id !== action.data.id);
+    // TODO: remove all components that use this image?
+    return { ...state, images };
   }
   if (action.type === 'addComponent') {
     return { ...state, components: [...state.components, action.data] };
@@ -358,11 +369,15 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
 
   const uid = (type: 'image' | 'component' | 'imageRef') => {
     if (type === 'image') {
-      return state.images.length;
+      return state.images.length === 0 ? 0 : Math.max(...state.images.map((data) => data.id)) + 1;
     } else if (type === 'component') {
-      return state.components.length;
+      return state.components.length === 0
+        ? 0
+        : Math.max(...state.components.map((data) => data.id)) + 1;
     } else if (type === 'imageRef') {
-      return state.imageRefs.length;
+      return state.imageRefs.length === 0
+        ? 0
+        : Math.max(...state.imageRefs.map((data) => data.id)) + 1;
     }
     return 0;
   };

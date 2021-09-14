@@ -15,11 +15,12 @@ export const ImageLoader = ({
   addButton,
   components,
   form,
+  showDeleteButton = false,
 }: ImageLoaderProps) => {
   const img = useRef<HTMLImageElement | null>(null);
   const dropzone = useRef<HTMLDivElement | null>(null);
   const [dropzoneActive, setDropzoneActive] = useState(false);
-  const { uid } = useProjectContext();
+  const { uid, dispatch } = useProjectContext();
   const [data, setData] = useState<string | ArrayBuffer | null>(initialData?.data ?? null);
   const [rawData, setRawData] = useState<string | ArrayBuffer | null>(null);
   const [imgData, setImgData] = useState<ImageData>(
@@ -112,7 +113,7 @@ export const ImageLoader = ({
       reader.addEventListener('loadend', async () => {
         if (typeof reader.result === 'string') {
           const resavedData = await resaveDataUrl(reader.result);
-          setData(resavedData);
+          setData(resavedData.dataUrl);
         } else {
           setData(null);
         }
@@ -135,7 +136,7 @@ export const ImageLoader = ({
           const base64 = event.target?.result;
           if (typeof base64 === 'string') {
             const resavedData = await resaveDataUrl(base64);
-            setData(resavedData);
+            setData(resavedData.dataUrl);
           } else {
             setData(null);
           }
@@ -150,6 +151,13 @@ export const ImageLoader = ({
       {loading && <LoadingIndicator />}
       {children}
       <div className="header__container">
+        {showDeleteButton && (
+          <div className="header__col">
+            <button onClick={() => dispatch({ type: 'removeImage', data: imgData })}>
+              Delete Image
+            </button>
+          </div>
+        )}
         <div className="header__col">
           <div>
             {imgData && (

@@ -190,7 +190,7 @@ textarea {
 }
 
 .form__row span {
-  min-width: 80px;
+  min-width: 110px;
   display: inline-block;
 }
 
@@ -264,4 +264,17 @@ textarea {
 .component-variant--active {
   /*border-image: conic-gradient(red, yellow, lime, aqua, blue, magenta, red) 1;*/
   background: #ff0000;
+}
+
+.image-list__container {
+  margin-top: 30px;
+}
+
+.image-list__image {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.image-list__image input {
+  margin-right: 15px;
 }

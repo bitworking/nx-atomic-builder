@@ -52,9 +52,9 @@ export const ImageComponent = ({ imageRef }: ImageProps) => {
         height: imageRef.height * scaleHeight,
       });
 
-      setDataUrl(data);
+      setDataUrl(data.dataUrl);
 
-      dispatch({ type: 'saveToImageCache', imageRef, data });
+      dispatch({ type: 'saveToImageCache', imageRef, data: data.dataUrl });
     } else {
       setDataUrl(null);
     }

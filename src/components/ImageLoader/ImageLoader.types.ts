@@ -9,4 +9,5 @@ export type ImageLoaderProps = {
   addButton?: React.ReactNode;
   components?: React.ReactNode;
   form?: React.ReactNode;
+  showDeleteButton?: boolean;
 };

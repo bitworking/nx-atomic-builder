@@ -8,14 +8,22 @@ export type Crop = Size & {
   y: number;
 };
 
-export const cropDataUrl = async (dataUrl: string, crop: Crop): Promise<string> => {
+export type DataUrlAndSize = {
+  dataUrl: string;
+  size: Size;
+};
+
+export const cropDataUrl = async (imageSrc: string, crop: Crop): Promise<DataUrlAndSize> => {
   const drawCanvas = (img: HTMLImageElement) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = crop.width;
     canvas.height = crop.height;
     ctx?.drawImage(img, crop.x, crop.y, crop.width, crop.height, 0, 0, crop.width, crop.height);
-    return canvas.toDataURL('image/webp', 0.8);
+    return {
+      dataUrl: canvas.toDataURL('image/webp', 0.8),
+      size: { width: canvas.width, height: canvas.height },
+    };
   };
 
   const start = (resolve: any, img: HTMLImageElement) => {
@@ -27,18 +35,21 @@ export const cropDataUrl = async (dataUrl: string, crop: Crop): Promise<string> 
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => start(resolve, img);
-    img.src = dataUrl;
+    img.src = imageSrc;
   });
 };
 
-export const resizeDataUrl = async (dataUrl: string, size: Size): Promise<string> => {
+export const resizeDataUrl = async (imageSrc: string, size: Size): Promise<DataUrlAndSize> => {
   const drawCanvas = (img: HTMLImageElement) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = size.width;
     canvas.height = size.height;
     ctx?.drawImage(img, 0, 0, size.width, size.height);
-    return canvas.toDataURL('image/webp', 0.8);
+    return {
+      dataUrl: canvas.toDataURL('image/webp', 0.8),
+      size: { width: canvas.width, height: canvas.height },
+    };
   };
 
   const start = (resolve: any, img: HTMLImageElement) => {
@@ -50,18 +61,21 @@ export const resizeDataUrl = async (dataUrl: string, size: Size): Promise<string
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => start(resolve, img);
-    img.src = dataUrl;
+    img.src = imageSrc;
   });
 };
 
-export const resaveDataUrl = async (dataUrl: string): Promise<string> => {
+export const resaveDataUrl = async (imageSrc: string): Promise<DataUrlAndSize> => {
   const drawCanvas = (img: HTMLImageElement) => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     canvas.width = img.naturalWidth;
     canvas.height = img.naturalHeight;
     ctx?.drawImage(img, 0, 0, img.naturalWidth, img.naturalHeight);
-    return canvas.toDataURL('image/webp', 0.8);
+    return {
+      dataUrl: canvas.toDataURL('image/webp', 0.8),
+      size: { width: canvas.width, height: canvas.height },
+    };
   };
 
   const start = (resolve: any, img: HTMLImageElement) => {
@@ -73,6 +87,6 @@ export const resaveDataUrl = async (dataUrl: string): Promise<string> => {
     const img = new Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => start(resolve, img);
-    img.src = dataUrl;
+    img.src = imageSrc;
   });
 };

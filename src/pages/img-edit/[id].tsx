@@ -39,6 +39,7 @@ const Page: NextPage = () => {
           components={components}
           addButton={addButton}
           form={form}
+          showDeleteButton={true}
         >
           <h1>Edit image : {imgData.name}</h1>
         </ImageLoader>

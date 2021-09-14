@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { ImageLoader } from 'components/ImageLoader';
 import { ImageData, useProjectContext } from 'components/ProjectProvider';
 import styles from 'styles/Home.module.css';
+import { FigmaImport } from 'components/FigmaImport';
 
 const Page: NextPage = () => {
   const [reset, setReset] = useState({});
@@ -26,9 +27,12 @@ const Page: NextPage = () => {
   };
 
   return (
-    <ImageLoader reset={reset} onData={addImage}>
-      <h1>Add image</h1>
-    </ImageLoader>
+    <>
+      <ImageLoader reset={reset} onData={addImage}>
+        <h1>Add image</h1>
+      </ImageLoader>
+      <FigmaImport />
+    </>
   );
 };
 
