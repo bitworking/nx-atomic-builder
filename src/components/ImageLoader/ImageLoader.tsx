@@ -162,7 +162,16 @@ export const ImageLoader = ({
           <div>
             {imgData && (
               <p>
-                {imgData?.width}x{imgData?.height} pixels
+                {imgData.width}x{imgData.height} pixels
+                {imgData.figmaUrl && (
+                  <>
+                    <br />
+                    <br />
+                    <a href={imgData.figmaUrl} target="_blank" rel="noopener noreferrer">
+                      Figma Link
+                    </a>
+                  </>
+                )}
               </p>
             )}
           </div>

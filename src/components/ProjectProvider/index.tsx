@@ -25,6 +25,7 @@ export type ImageData = {
   data: string;
   width: number;
   height: number;
+  figmaUrl?: string;
 };
 
 export type PropData = {

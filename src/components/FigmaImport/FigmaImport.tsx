@@ -156,6 +156,7 @@ export const FigmaImport = () => {
             data: imageData.dataUrl,
             width: imageData.size.width,
             height: imageData.size.height,
+            figmaUrl: `https://www.figma.com/file/${fileKey}?node-id=${encodeURIComponent(key)}`,
           },
         });
 
