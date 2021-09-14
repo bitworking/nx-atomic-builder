@@ -29,7 +29,7 @@ const getFromCache = (state: ProjectData, imageRef: ImageRef) => {
 
 export const ImageComponent = ({ imageRef }: ImageProps) => {
   const { dispatch, state } = useProjectContext();
-  const [dataUrl, setDataUrl] = useState<string | null>(null);
+  const [dataUrl, setDataUrl] = useState<string | null | undefined>(null);
 
   useEffectAsync(async () => {
     if (imageRef) {
@@ -40,7 +40,12 @@ export const ImageComponent = ({ imageRef }: ImageProps) => {
         return;
       }
 
-      const imageData = state.images[imageRef.imageId];
+      const imageData = state.images.find((image) => image.id === imageRef.imageId);
+
+      if (!imageData) {
+        setDataUrl(undefined);
+        return;
+      }
 
       const scaleWidth = imageData.width;
       const scaleHeight = imageData.height;
@@ -66,6 +71,9 @@ export const ImageComponent = ({ imageRef }: ImageProps) => {
     <>
       {dataUrl && (
         <img src={dataUrl} style={{ maxWidth: '100%', height: 'auto', display: 'block' }} />
+      )}
+      {!dataUrl && (
+        <div style={{ minHeight: '20px' }}>{dataUrl === undefined && 'Image data not found'}</div>
       )}
     </>
   );

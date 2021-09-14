@@ -32,8 +32,8 @@ const Page: NextPage = () => {
 
       if (imageRef) {
         setImageRef(imageRef);
-        const imageData = state.images[imageRef.imageId];
-        setImageData(imageData);
+        const imageData = state.images.find((image) => image.id === imageRef.imageId);
+        setImageData(imageData ?? null);
       } else {
         setImageRef(null);
         setImageData(null);

@@ -180,6 +180,8 @@ export type Action =
   | ActionRemoveColor;
 
 const reducer = (state: ProjectData, action: Action): ProjectData => {
+  const uid = uidFactory(state);
+
   if (action.type === 'addImage') {
     // remove if already in array
     // TODO: use map instead for updating?
@@ -200,7 +202,7 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
       components: [
         ...state.components,
         {
-          id: state.components.length,
+          id: uid('component'),
           name: '',
           props: {},
         },
@@ -217,22 +219,25 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
     return { ...state, components: mapped };
   }
   if (action.type === 'createImageRef') {
+    const parentImageRef = state.imageRefs.find(
+      (imageRef) => imageRef.id === action.parentImageRefId
+    );
     return {
       ...state,
       imageRefs: [
         ...state.imageRefs,
         {
-          id: state.imageRefs.length,
+          id: uid('imageRef'),
           imageId: action.imageData.id,
           componentId: action.componentId,
           componentName: null,
           parentComponentId: action.parentComponentId,
           parentImageRefId: action.parentImageRefId,
-          x: action.parentImageRefId ? state.imageRefs[action.parentImageRefId].x + 0 : 0,
-          y: action.parentImageRefId ? state.imageRefs[action.parentImageRefId].y + 0 : 0,
-          // TODO: read image size and calculate percentage for e.g. 50x50px
-          width: 0.2,
-          height: 0.2,
+          x: parentImageRef ? parentImageRef.x : 0,
+          y: parentImageRef ? parentImageRef.y : 0,
+          // TODO: include zoom factor
+          width: Math.min(100 / action.imageData.width, parentImageRef?.width ?? 0.2),
+          height: Math.min(100 / action.imageData.height, parentImageRef?.height ?? 0.2),
         },
       ],
     };
@@ -365,23 +370,25 @@ const reducer = (state: ProjectData, action: Action): ProjectData => {
   return state;
 };
 
+const uidFactory = (state: ProjectData) => (type: 'image' | 'component' | 'imageRef') => {
+  if (type === 'image') {
+    return state.images.length === 0 ? 0 : Math.max(...state.images.map((data) => data.id)) + 1;
+  } else if (type === 'component') {
+    return state.components.length === 0
+      ? 0
+      : Math.max(...state.components.map((data) => data.id)) + 1;
+  } else if (type === 'imageRef') {
+    return state.imageRefs.length === 0
+      ? 0
+      : Math.max(...state.imageRefs.map((data) => data.id)) + 1;
+  }
+  return 0;
+};
+
 export const ProjectProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, initialValue.state);
 
-  const uid = (type: 'image' | 'component' | 'imageRef') => {
-    if (type === 'image') {
-      return state.images.length === 0 ? 0 : Math.max(...state.images.map((data) => data.id)) + 1;
-    } else if (type === 'component') {
-      return state.components.length === 0
-        ? 0
-        : Math.max(...state.components.map((data) => data.id)) + 1;
-    } else if (type === 'imageRef') {
-      return state.imageRefs.length === 0
-        ? 0
-        : Math.max(...state.imageRefs.map((data) => data.id)) + 1;
-    }
-    return 0;
-  };
+  const uid = uidFactory(state);
 
   // useEffect(() => {
   //   console.log(state);
