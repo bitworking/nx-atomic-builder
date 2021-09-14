@@ -13,17 +13,71 @@ export const FigmaImport = () => {
     token: string;
     projectId: string;
     page: string;
+    fileKey: string;
     fileId: number;
-  }>({ token: '', projectId: '', page: '', fileId: 0 });
+  }>({ token: '', projectId: '', page: '', fileKey: '', fileId: 0 });
+
+  const getImagesFromFileKey = async (fileKey: string) => {
+    try {
+      const headers = new Headers();
+      headers.append('X-FIGMA-TOKEN', formData.token);
+
+      const init = {
+        method: 'GET',
+        headers: headers,
+      };
+
+      // get file
+      const request = new Request(`https://api.figma.com/v1/files/${fileKey}`);
+      const response = await fetch(request, init);
+      const text = await response.text();
+      const json = JSON.parse(text);
+
+      if (!formData.page) {
+        console.log(
+          'Available pages',
+          json?.document?.children?.map((child: any) => child.name)
+        );
+        setLoading(false);
+        return [];
+      }
+
+      // top level ids: all pages
+      // const ids = json?.document?.children?.map((child: any) => child.id);
+
+      const pageData = json?.document?.children?.find((child: any) => child.name === formData.page);
+
+      const images = (pageData?.children ?? []).map((child: any) => ({
+        id: child.id,
+        name: child.name,
+      }));
+
+      return images;
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
+  };
 
   const getImages = async () => {
-    if (!formData.token || !formData.projectId) {
+    if (!formData.token || (!formData.projectId && !formData.fileKey)) {
       return;
     }
 
     setLoading(true);
     setImages([]);
     setSelectedImages([]);
+
+    // file key available
+
+    if (formData.fileKey) {
+      const images = await getImagesFromFileKey(formData.fileKey);
+      setImages(images);
+      setSelectedImages(images.map((image: any) => image.id));
+      setFileKey(formData.fileKey);
+      setLoading(false);
+      return;
+    }
 
     const headers = new Headers();
     headers.append('X-FIGMA-TOKEN', formData.token);
@@ -53,31 +107,7 @@ export const FigmaImport = () => {
 
       setFileKey(firstFileKey);
 
-      // get file
-      request = new Request(`https://api.figma.com/v1/files/${firstFileKey}`);
-      response = await fetch(request, init);
-      text = await response.text();
-      json = JSON.parse(text);
-
-      if (!formData.page) {
-        console.log(
-          'Available pages',
-          json?.document?.children?.map((child: any) => child.name)
-        );
-        setLoading(false);
-        return;
-      }
-
-      // top level ids: all pages
-      // const ids = json?.document?.children?.map((child: any) => child.id);
-
-      const pageData = json?.document?.children?.find((child: any) => child.name === formData.page);
-
-      const images = (pageData?.children ?? []).map((child: any) => ({
-        id: child.id,
-        name: child.name,
-      }));
-
+      const images = await getImagesFromFileKey(firstFileKey);
       setImages(images);
       setSelectedImages(images.map((image: any) => image.id));
       setLoading(false);
@@ -143,6 +173,9 @@ export const FigmaImport = () => {
     <>
       <div>
         <h3>Figma image import</h3>
+        <p style={{ fontStyle: 'italic' }}>
+          Fill out either &quot;Project ID&quot; or &quot;File Key&quot;
+        </p>
         <div className="form__row">
           <label>
             <span>Access token: </span>
@@ -166,6 +199,20 @@ export const FigmaImport = () => {
               onChange={(event) => {
                 const value = event.currentTarget.value;
                 setFormData((prev) => ({ ...prev, projectId: value }));
+              }}
+            />
+          </label>
+        </div>
+
+        <div className="form__row">
+          <label>
+            <span>File Key: </span>
+            <input
+              type="text"
+              value={formData.fileKey}
+              onChange={(event) => {
+                const value = event.currentTarget.value;
+                setFormData((prev) => ({ ...prev, fileKey: value }));
               }}
             />
           </label>
