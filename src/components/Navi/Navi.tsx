@@ -10,7 +10,13 @@ export const Navi = () => {
 
   return (
     <>
-      <h2>Atomic Builder</h2>
+      <p>
+        <Link href="/">
+          <a>
+            <img src="/logo.png" alt="Atomic Builder" />
+          </a>
+        </Link>
+      </p>
       <h3>Pages</h3>
       <ul>
         <li>
