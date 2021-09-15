@@ -6,6 +6,7 @@ import { groupBy, compareField } from 'libs/utils/sort';
 export const Navi = () => {
   const { state } = useProjectContext();
   const [showVariants, setShowVariants] = useState(true);
+  const [showImages, setShowImages] = useState(true);
 
   return (
     <>
@@ -31,18 +32,28 @@ export const Navi = () => {
         )}
       </ul>
       <h3>Images</h3>
-      <ul>
-        {state.images
-          .map((c) => c)
-          .sort(compareField('name'))
-          .map((img) => (
-            <li key={img.id}>
-              <Link href={`/img-edit/${img.id}`}>
-                <a>{img.name}</a>
-              </Link>
-            </li>
-          ))}
-      </ul>
+      <p className="text-checkbox">
+        <span>Show images</span>
+        <input
+          type="checkbox"
+          checked={showImages}
+          onChange={(event) => setShowImages(event.currentTarget.checked)}
+        />
+      </p>
+      {showImages && (
+        <ul>
+          {state.images
+            .map((c) => c)
+            .sort(compareField('name'))
+            .map((img) => (
+              <li key={img.id}>
+                <Link href={`/img-edit/${img.id}`}>
+                  <a>{img.name}</a>
+                </Link>
+              </li>
+            ))}
+        </ul>
+      )}
       <h3>Components</h3>
       {state.components.length > 0 && (
         <p className="text-checkbox">
